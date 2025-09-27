@@ -42,13 +42,17 @@ def create_triplet_model(embedding_dim=128):
     return model, base_network
 
 def triplet_loss(margin=0.2):
-    """Custom triplet loss function."""
+    """custom triplet loss function."""
+    @tf.function
     def loss(y_true, y_pred):
-        anchor, positive, negative = y_pred[0], y_pred[1], y_pred[2]
+        
+        anchor = y_pred[0]
+        positive = y_pred[1]
+        negative = y_pred[2]
         
         # calculate distances
-        pos_dist = tf.reduce_sum(tf.square(anchor - positive), axis=1)
-        neg_dist = tf.reduce_sum(tf.square(anchor - negative), axis=1) 
+        pos_dist = tf.reduce_sum(tf.square(anchor - positive), axis=-1)
+        neg_dist = tf.reduce_sum(tf.square(anchor - negative), axis=-1) 
         
         # triplet loss: max(0, pos_dist - neg_dist + margin)
         loss = tf.maximum(0.0, pos_dist - neg_dist + margin)
