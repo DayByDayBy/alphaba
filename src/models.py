@@ -13,8 +13,9 @@ def create_base_network(input_shape=(105, 105, 1), embedding_dim=128):
         layers.MaxPooling2D(2, 2),
         layers.Conv2D(256, (4, 4), activation='relu'),
         layers.Flatten(),
-        layers.Dense(4096, activation='sigmoid'),
-        layers.Dense(embedding_dim, activation=None)  # No activation for embeddings
+        layers.Dense(4096, activation='relu'),  # changed to ReLU
+        layers.Dense(embedding_dim, activation=None),  # no activation
+        layers.Lambda(lambda x: tf.nn.l2_normalize(x, axis=1))  # L2 normalize embeddings
     ])
     return model
 
