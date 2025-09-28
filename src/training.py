@@ -78,7 +78,7 @@ def train_triplet_model(model, data_loader, epochs=10, batch_size=32, steps_per_
             
             loss = model.train_on_batch(
                 [anchors, positives, negatives],
-                [np.zeros((batch_size, 128)), np.zeros((batch_size, 128)), np.zeros((batch_size, 128))]
+                [np.zeros((batch_size, 64)), np.zeros((batch_size, 64)), np.zeros((batch_size, 64))]
             )
             epoch_losses.append(loss)
             
@@ -119,6 +119,10 @@ def evaluate_embeddings(model,data_loader, num_samples=500):
     
     images = np.array(images)
     embeddings = base_network.predict(images, verbose=0)
+
+    # Apply L2 normalization for evaluation
+    from src.models import normalize_embeddings
+    embeddings = normalize_embeddings(embeddings).numpy()
     
     tsne = TSNE(n_components=2, random_state=42, perplexity=30)
     reduced_embeddings_2d = tsne.fit_transform(embeddings)
