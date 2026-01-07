@@ -5,10 +5,19 @@ from sklearn.manifold import TSNE
 
 
 
-def train_triplet_model_custom(triplet_model, data_loader, epochs=10, batch_size=32, steps_per_epoch=100, learning_rate=0.01):
-    """train triplet model with custom training loop"""
+def train_triplet_model_custom(triplet_model, data_loader, epochs=10, batch_size=32, steps_per_epoch=100, learning_rate=0.001, margin=0.2, use_augmentation=True):
+    """train triplet model with improved training loop and optional augmentation"""
     optimizer = tf.keras.optimizers.Adam(learning_rate=learning_rate)
-    history = {'loss':[]}
+    history = {'loss': []}
+    
+    # Learning rate scheduler
+    lr_schedule = tf.keras.optimizers.schedules.ExponentialDecay(
+        initial_learning_rate=learning_rate,
+        decay_steps=steps_per_epoch * 5,
+        decay_rate=0.9,
+        staircase=True
+    )
+    optimizer.learning_rate = lr_schedule
     
     @tf.function
     def train_step(anchors, positives, negatives):
@@ -18,20 +27,28 @@ def train_triplet_model_custom(triplet_model, data_loader, epochs=10, batch_size
             pos_dist = tf.reduce_sum(tf.square(anchor_emb - positive_emb), axis=-1)
             neg_dist = tf.reduce_sum(tf.square(anchor_emb - negative_emb), axis=-1)
 
-            loss = tf.reduce_mean(tf.maximum(0.0, pos_dist - neg_dist + 0.5))  #  margin was .2, now .5
+            loss = tf.reduce_mean(tf.maximum(0.0, pos_dist - neg_dist + margin))
 
         gradients = tape.gradient(loss, triplet_model.trainable_variables)
         optimizer.apply_gradients(zip(gradients, triplet_model.trainable_variables))
 
         return loss
     
+    # Early stopping variables
+    best_loss = float('inf')
+    patience_counter = 0
+    patience = 10
+    
     for epoch in range(epochs):
         epoch_losses = []
-        print(f"Epoch {epoch+1}/{epochs}")
+        print(f"Epoch {epoch+1}/{epochs} - LR: {optimizer.learning_rate.numpy():.6f}")
         
         for step in range(steps_per_epoch):
-
-            anchors, positives, negatives = data_loader.generate_batch(batch_size)
+            # Use augmentation if enabled and data loader supports it
+            if use_augmentation and hasattr(data_loader, 'generate_batch'):
+                anchors, positives, negatives = data_loader.generate_batch(batch_size, augment=True)
+            else:
+                anchors, positives, negatives = data_loader.generate_batch(batch_size)
 
             anchors = tf.convert_to_tensor(anchors, dtype=tf.float32)
             positives = tf.convert_to_tensor(positives, dtype=tf.float32)
@@ -42,15 +59,23 @@ def train_triplet_model_custom(triplet_model, data_loader, epochs=10, batch_size
             epoch_losses.append(float(loss))
 
             if step % 20 == 0:
-                print(f" Step {step}/{steps_per_epoch} - loss: {loss.numpy():.4f}")
+                current_lr = optimizer.learning_rate.numpy()
+                print(f" Step {step}/{steps_per_epoch} - loss: {loss.numpy():.4f} - LR: {current_lr:.6f}")
 
-                # debug: Check model weights are changing (first epoch only)
-                if epoch == 0 and step == 0:
-                    print("Debug - Checking if model weights change...")
-                
         avg_loss = np.mean(epoch_losses)
         history['loss'].append(avg_loss)
         print(f" Epoch {epoch+1} - avg loss: {avg_loss:.4f}")
+        
+        # Early stopping check
+        if avg_loss < best_loss:
+            best_loss = avg_loss
+            patience_counter = 0
+        else:
+            patience_counter += 1
+            if patience_counter >= patience:
+                print(f"Early stopping triggered after {epoch+1} epochs")
+                break
+        
         print("-" * 50)
     return history
 
@@ -142,7 +167,7 @@ def evaluate_embeddings(model,data_loader, num_samples=500):
     
     
     
-    plt.legend(box_to_anchor=(1.05, 1), loc='upper left')
+    plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
     plt.title('learned char embeddings (t-SNE vis)')
     plt.ylabel('Dimension 2')
     plt.tight_layout()
