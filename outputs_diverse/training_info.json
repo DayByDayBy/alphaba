@@ -1,0 +1,170 @@
+{
+  "alphabets_used": [
+    "greek_system",
+    "armenian_system",
+    "greek_primary",
+    "armenian_primary",
+    "latin_primary",
+    "greek_serif_1",
+    "greek_sans_serif_2",
+    "greek_decorative_3",
+    "greek_monospace_4",
+    "armenian_serif_5",
+    "armenian_sans_serif_6",
+    "armenian_decorative_7",
+    "armenian_monospace_8",
+    "latin_serif_9",
+    "latin_sans_serif_10",
+    "google_sans_1",
+    "google_sans_2",
+    "noto_sans_armenian_1",
+    "noto_sans_avestan_1",
+    "noto_sans_deseret_1",
+    "noto_sans_georgian_1",
+    "noto_sans_osage_1",
+    "noto_serif_georgian_1"
+  ],
+  "epochs": 10,
+  "batch_size": 16,
+  "embedding_dim": 64,
+  "alphabet_stats": {
+    "greek_system": {
+      "name": "Greek System",
+      "type": "system_font",
+      "character_count": 24,
+      "unique_az_chars": 24
+    },
+    "armenian_system": {
+      "name": "Armenian System",
+      "type": "system_font",
+      "character_count": 38,
+      "unique_az_chars": 28
+    },
+    "greek_primary": {
+      "name": "Greek Primary",
+      "type": "system_font",
+      "character_count": 24,
+      "unique_az_chars": 24
+    },
+    "armenian_primary": {
+      "name": "Armenian Primary",
+      "type": "system_font",
+      "character_count": 38,
+      "unique_az_chars": 28
+    },
+    "latin_primary": {
+      "name": "Latin Primary",
+      "type": "system_font",
+      "character_count": 26,
+      "unique_az_chars": 26
+    },
+    "greek_serif_1": {
+      "name": "Greek_Serif_1",
+      "type": "system_font",
+      "character_count": 24,
+      "unique_az_chars": 24
+    },
+    "greek_sans_serif_2": {
+      "name": "Greek_Sans_Serif_2",
+      "type": "system_font",
+      "character_count": 24,
+      "unique_az_chars": 24
+    },
+    "greek_decorative_3": {
+      "name": "Greek_Decorative_3",
+      "type": "system_font",
+      "character_count": 24,
+      "unique_az_chars": 24
+    },
+    "greek_monospace_4": {
+      "name": "Greek_Monospace_4",
+      "type": "system_font",
+      "character_count": 24,
+      "unique_az_chars": 24
+    },
+    "armenian_serif_5": {
+      "name": "Armenian_Serif_5",
+      "type": "system_font",
+      "character_count": 38,
+      "unique_az_chars": 28
+    },
+    "armenian_sans_serif_6": {
+      "name": "Armenian_Sans_Serif_6",
+      "type": "system_font",
+      "character_count": 38,
+      "unique_az_chars": 28
+    },
+    "armenian_decorative_7": {
+      "name": "Armenian_Decorative_7",
+      "type": "system_font",
+      "character_count": 38,
+      "unique_az_chars": 28
+    },
+    "armenian_monospace_8": {
+      "name": "Armenian_Monospace_8",
+      "type": "system_font",
+      "character_count": 38,
+      "unique_az_chars": 28
+    },
+    "latin_serif_9": {
+      "name": "Latin_Serif_9",
+      "type": "system_font",
+      "character_count": 26,
+      "unique_az_chars": 26
+    },
+    "latin_sans_serif_10": {
+      "name": "Latin_Sans_Serif_10",
+      "type": "system_font",
+      "character_count": 26,
+      "unique_az_chars": 26
+    },
+    "google_sans_1": {
+      "name": "Google Sans_1",
+      "type": "custom_font",
+      "character_count": 26,
+      "unique_az_chars": 26
+    },
+    "google_sans_2": {
+      "name": "Google Sans_2",
+      "type": "custom_font",
+      "character_count": 26,
+      "unique_az_chars": 26
+    },
+    "noto_sans_armenian_1": {
+      "name": "Noto Sans Armenian_1",
+      "type": "custom_font",
+      "character_count": 38,
+      "unique_az_chars": 28
+    },
+    "noto_sans_avestan_1": {
+      "name": "Noto Sans Avestan_1",
+      "type": "custom_font",
+      "character_count": 37,
+      "unique_az_chars": 21
+    },
+    "noto_sans_deseret_1": {
+      "name": "Noto Sans Deseret_1",
+      "type": "custom_font",
+      "character_count": 60,
+      "unique_az_chars": 39
+    },
+    "noto_sans_georgian_1": {
+      "name": "Noto Sans Georgian_1",
+      "type": "custom_font",
+      "character_count": 35,
+      "unique_az_chars": 30
+    },
+    "noto_sans_osage_1": {
+      "name": "Noto Sans Osage_1",
+      "type": "custom_font",
+      "character_count": 30,
+      "unique_az_chars": 30
+    },
+    "noto_serif_georgian_1": {
+      "name": "Noto Serif Georgian_1",
+      "type": "custom_font",
+      "character_count": 35,
+      "unique_az_chars": 30
+    }
+  }
+}

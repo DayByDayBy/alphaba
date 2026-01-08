@@ -1,0 +1,44 @@
+{
+  "alphabets_used": [
+    "greek_system",
+    "armenian_system",
+    "greek_primary",
+    "armenian_primary",
+    "latin_primary"
+  ],
+  "epochs": 5,
+  "batch_size": 8,
+  "embedding_dim": 64,
+  "alphabet_stats": {
+    "greek_system": {
+      "name": "Greek System",
+      "type": "system_font",
+      "character_count": 24,
+      "unique_az_chars": 24
+    },
+    "armenian_system": {
+      "name": "Armenian System",
+      "type": "system_font",
+      "character_count": 38,
+      "unique_az_chars": 28
+    },
+    "greek_primary": {
+      "name": "Greek Primary",
+      "type": "system_font",
+      "character_count": 24,
+      "unique_az_chars": 24
+    },
+    "armenian_primary": {
+      "name": "Armenian Primary",
+      "type": "system_font",
+      "character_count": 38,
+      "unique_az_chars": 28
+    },
+    "latin_primary": {
+      "name": "Latin Primary",
+      "type": "system_font",
+      "character_count": 26,
+      "unique_az_chars": 26
+    }
+  }
+}

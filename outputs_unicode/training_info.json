@@ -1,0 +1,111 @@
+{
+  "epochs": 30,
+  "batch_size": 32,
+  "steps_per_epoch": 30,
+  "embedding_dim": 64,
+  "learning_rate": 0.001,
+  "alphabets": [
+    "Noto_Sans_Georgian",
+    "Noto_Serif_Georgian",
+    "Noto_Sans_Lycian",
+    "Noto_Sans_Coptic",
+    "Google_Sans",
+    "Noto_Sans_Avestan",
+    "Tirra",
+    "Noto_Sans_Osage",
+    "Noto_Sans_Elbasan",
+    "Noto_Sans_Old_Permic",
+    "Noto_Sans_Deseret",
+    "Noto_Sans_Armenian",
+    "Noto_Sans_Old_Hungarian",
+    "Noto_Sans_Caucasian_Albanian"
+  ],
+  "total_characters": 954,
+  "final_loss": 0.20000000298023224,
+  "alphabet_stats": {
+    "Noto_Sans_Georgian": {
+      "count": 96,
+      "scripts": [
+        "georgian"
+      ]
+    },
+    "Noto_Serif_Georgian": {
+      "count": 96,
+      "scripts": [
+        "georgian"
+      ]
+    },
+    "Noto_Sans_Lycian": {
+      "count": 32,
+      "scripts": [
+        "lycian"
+      ]
+    },
+    "Noto_Sans_Coptic": {
+      "count": 128,
+      "scripts": [
+        "coptic"
+      ]
+    },
+    "Google_Sans": {
+      "count": 26,
+      "scripts": [
+        "latin"
+      ]
+    },
+    "Noto_Sans_Avestan": {
+      "count": 64,
+      "scripts": [
+        "avestan"
+      ]
+    },
+    "Tirra": {
+      "count": 26,
+      "scripts": [
+        "latin"
+      ]
+    },
+    "Noto_Sans_Osage": {
+      "count": 80,
+      "scripts": [
+        "osage"
+      ]
+    },
+    "Noto_Sans_Elbasan": {
+      "count": 48,
+      "scripts": [
+        "elbasan"
+      ]
+    },
+    "Noto_Sans_Old_Permic": {
+      "count": 48,
+      "scripts": [
+        "old_permic"
+      ]
+    },
+    "Noto_Sans_Deseret": {
+      "count": 80,
+      "scripts": [
+        "deseret"
+      ]
+    },
+    "Noto_Sans_Armenian": {
+      "count": 38,
+      "scripts": [
+        "armenian"
+      ]
+    },
+    "Noto_Sans_Old_Hungarian": {
+      "count": 128,
+      "scripts": [
+        "old_hungarian"
+      ]
+    },
+    "Noto_Sans_Caucasian_Albanian": {
+      "count": 64,
+      "scripts": [
+        "caucasian_albanian"
+      ]
+    }
+  }
+}

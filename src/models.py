@@ -2,7 +2,7 @@ import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers, models, Model # type: ignore
 
-def create_base_network(input_shape=(105, 105, 1), embedding_dim=64):
+def create_base_network(input_shape=(64, 64, 1), embedding_dim=64):
     """Create the base CNN for feature extraction."""
     model = models.Sequential([
         layers.Input(shape=input_shape),  # Use Input layer instead of input_shape
@@ -31,9 +31,9 @@ def create_triplet_model(embedding_dim=64):
     base_network = create_base_network(embedding_dim=embedding_dim)
 
     # 3 inputs
-    anchor_input = layers.Input(shape=(105, 105, 1), name='anchor')
-    positive_input = layers.Input(shape=(105, 105, 1), name='positive')
-    negative_input = layers.Input(shape=(105, 105, 1), name='negative')
+    anchor_input = layers.Input(shape=(64, 64, 1), name='anchor')
+    positive_input = layers.Input(shape=(64, 64, 1), name='positive')
+    negative_input = layers.Input(shape=(64, 64, 1), name='negative')
     
     # get embeddings using shared weights
     anchor_embedding = base_network(anchor_input)

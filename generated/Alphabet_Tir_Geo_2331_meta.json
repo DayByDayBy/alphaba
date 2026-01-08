@@ -1,0 +1,140 @@
+{
+  "sources": [
+    "Tirra",
+    "Noto_Serif_Georgian",
+    "Noto_Sans_Lycian",
+    "Noto_Sans_Old_Permic"
+  ],
+  "characters": [
+    {
+      "letter": "A",
+      "source_alphabet": "Noto_Sans_Old_Permic",
+      "original_char": "𐍣"
+    },
+    {
+      "letter": "B",
+      "source_alphabet": "Tirra",
+      "original_char": "M"
+    },
+    {
+      "letter": "C",
+      "source_alphabet": "Noto_Sans_Lycian",
+      "original_char": "𐊉"
+    },
+    {
+      "letter": "D",
+      "source_alphabet": "Noto_Sans_Old_Permic",
+      "original_char": "𐍷"
+    },
+    {
+      "letter": "E",
+      "source_alphabet": "Noto_Sans_Old_Permic",
+      "original_char": "𐍻"
+    },
+    {
+      "letter": "F",
+      "source_alphabet": "Noto_Serif_Georgian",
+      "original_char": "რ"
+    },
+    {
+      "letter": "G",
+      "source_alphabet": "Noto_Serif_Georgian",
+      "original_char": "ღ"
+    },
+    {
+      "letter": "H",
+      "source_alphabet": "Noto_Serif_Georgian",
+      "original_char": "ჸ"
+    },
+    {
+      "letter": "I",
+      "source_alphabet": "Tirra",
+      "original_char": "X"
+    },
+    {
+      "letter": "J",
+      "source_alphabet": "Noto_Sans_Old_Permic",
+      "original_char": "𐍛"
+    },
+    {
+      "letter": "K",
+      "source_alphabet": "Noto_Serif_Georgian",
+      "original_char": "ჹ"
+    },
+    {
+      "letter": "L",
+      "source_alphabet": "Noto_Serif_Georgian",
+      "original_char": "Ⴗ"
+    },
+    {
+      "letter": "M",
+      "source_alphabet": "Tirra",
+      "original_char": "T"
+    },
+    {
+      "letter": "N",
+      "source_alphabet": "Noto_Serif_Georgian",
+      "original_char": "Ⴋ"
+    },
+    {
+      "letter": "O",
+      "source_alphabet": "Noto_Sans_Lycian",
+      "original_char": "𐊉"
+    },
+    {
+      "letter": "P",
+      "source_alphabet": "Noto_Sans_Old_Permic",
+      "original_char": "𐍿"
+    },
+    {
+      "letter": "Q",
+      "source_alphabet": "Noto_Sans_Old_Permic",
+      "original_char": "𐍽"
+    },
+    {
+      "letter": "R",
+      "source_alphabet": "Tirra",
+      "original_char": "V"
+    },
+    {
+      "letter": "S",
+      "source_alphabet": "Noto_Sans_Lycian",
+      "original_char": "𐊏"
+    },
+    {
+      "letter": "T",
+      "source_alphabet": "Noto_Sans_Lycian",
+      "original_char": "𐊐"
+    },
+    {
+      "letter": "U",
+      "source_alphabet": "Noto_Sans_Lycian",
+      "original_char": "𐊚"
+    },
+    {
+      "letter": "V",
+      "source_alphabet": "Noto_Serif_Georgian",
+      "original_char": "შ"
+    },
+    {
+      "letter": "W",
+      "source_alphabet": "Tirra",
+      "original_char": "G"
+    },
+    {
+      "letter": "X",
+      "source_alphabet": "Tirra",
+      "original_char": "L"
+    },
+    {
+      "letter": "Y",
+      "source_alphabet": "Noto_Sans_Lycian",
+      "original_char": "𐊊"
+    },
+    {
+      "letter": "Z",
+      "source_alphabet": "Noto_Sans_Lycian",
+      "original_char": "𐊆"
+    }
+  ]
+}

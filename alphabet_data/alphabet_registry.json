@@ -1,0 +1,186 @@
+{
+  "greek_system": {
+    "name": "Greek System",
+    "type": "system_font",
+    "script_type": "greek",
+    "font_path": "/System/Library/Fonts/Arial.ttf",
+    "character_mapping": "greek",
+    "enabled": true
+  },
+  "armenian_system": {
+    "name": "Armenian System",
+    "type": "system_font",
+    "script_type": "armenian",
+    "font_path": "/System/Library/Fonts/Arial.ttf",
+    "character_mapping": "armenian",
+    "enabled": true
+  },
+  "greek_primary": {
+    "name": "Greek Primary",
+    "type": "system_font",
+    "script_type": "greek",
+    "font_path": "/System/Library/Fonts/Supplemental/Arial Narrow.ttf",
+    "character_mapping": "greek",
+    "enabled": true
+  },
+  "armenian_primary": {
+    "name": "Armenian Primary",
+    "type": "system_font",
+    "script_type": "armenian",
+    "font_path": "/System/Library/Fonts/Supplemental/Hoefler Text.ttc",
+    "character_mapping": "armenian",
+    "enabled": true
+  },
+  "latin_primary": {
+    "name": "Latin Primary",
+    "type": "system_font",
+    "script_type": "latin",
+    "font_path": "/System/Library/Fonts/Supplemental/Georgia Italic.ttf",
+    "character_mapping": "latin",
+    "enabled": true
+  },
+  "greek_serif_1": {
+    "name": "Greek_Serif_1",
+    "type": "system_font",
+    "script_type": "greek",
+    "font_path": "/System/Library/Fonts/Supplemental/NotoSerifBalinese-Regular.ttf",
+    "character_mapping": "greek",
+    "enabled": true
+  },
+  "greek_sans_serif_2": {
+    "name": "Greek_Sans_Serif_2",
+    "type": "system_font",
+    "script_type": "greek",
+    "font_path": "/System/Library/Fonts/Supplemental/NotoSansCarian-Regular.ttf",
+    "character_mapping": "greek",
+    "enabled": true
+  },
+  "greek_decorative_3": {
+    "name": "Greek_Decorative_3",
+    "type": "system_font",
+    "script_type": "greek",
+    "font_path": "/System/Library/Fonts/Supplemental/NotoSansInscriptionalPahlavi-Regular.ttf",
+    "character_mapping": "greek",
+    "enabled": true
+  },
+  "greek_monospace_4": {
+    "name": "Greek_Monospace_4",
+    "type": "system_font",
+    "script_type": "greek",
+    "font_path": "/System/Library/Fonts/Supplemental/Courier New Bold Italic.ttf",
+    "character_mapping": "greek",
+    "enabled": true
+  },
+  "armenian_serif_5": {
+    "name": "Armenian_Serif_5",
+    "type": "system_font",
+    "script_type": "armenian",
+    "font_path": "/System/Library/Fonts/Supplemental/NotoSerifBalinese-Regular.ttf",
+    "character_mapping": "armenian",
+    "enabled": true
+  },
+  "armenian_sans_serif_6": {
+    "name": "Armenian_Sans_Serif_6",
+    "type": "system_font",
+    "script_type": "armenian",
+    "font_path": "/System/Library/Fonts/Supplemental/NotoSansCarian-Regular.ttf",
+    "character_mapping": "armenian",
+    "enabled": true
+  },
+  "armenian_decorative_7": {
+    "name": "Armenian_Decorative_7",
+    "type": "system_font",
+    "script_type": "armenian",
+    "font_path": "/System/Library/Fonts/Supplemental/NotoSansInscriptionalPahlavi-Regular.ttf",
+    "character_mapping": "armenian",
+    "enabled": true
+  },
+  "armenian_monospace_8": {
+    "name": "Armenian_Monospace_8",
+    "type": "system_font",
+    "script_type": "armenian",
+    "font_path": "/System/Library/Fonts/Supplemental/Courier New Bold Italic.ttf",
+    "character_mapping": "armenian",
+    "enabled": true
+  },
+  "latin_serif_9": {
+    "name": "Latin_Serif_9",
+    "type": "system_font",
+    "script_type": "latin",
+    "font_path": "/System/Library/Fonts/Supplemental/NotoSerifBalinese-Regular.ttf",
+    "character_mapping": "latin",
+    "enabled": true
+  },
+  "latin_sans_serif_10": {
+    "name": "Latin_Sans_Serif_10",
+    "type": "system_font",
+    "script_type": "latin",
+    "font_path": "/System/Library/Fonts/Supplemental/NotoSansCarian-Regular.ttf",
+    "character_mapping": "latin",
+    "enabled": true
+  },
+  "google_sans_1": {
+    "name": "Google Sans_1",
+    "type": "custom_font",
+    "script_type": "latin",
+    "font_path": "alphabet_data/fonts/GoogleSans-VariableFont_GRAD,opsz,wght.ttf",
+    "character_mapping": "latin",
+    "enabled": true
+  },
+  "google_sans_2": {
+    "name": "Google Sans_2",
+    "type": "custom_font",
+    "script_type": "latin",
+    "font_path": "alphabet_data/fonts/GoogleSans-Italic-VariableFont_GRAD,opsz,wght.ttf",
+    "character_mapping": "latin",
+    "enabled": true
+  },
+  "noto_sans_armenian_1": {
+    "name": "Noto Sans Armenian_1",
+    "type": "custom_font",
+    "script_type": "armenian",
+    "font_path": "alphabet_data/fonts/NotoSansArmenian-VariableFont_wdth,wght.ttf",
+    "character_mapping": "armenian",
+    "enabled": true
+  },
+  "noto_sans_avestan_1": {
+    "name": "Noto Sans Avestan_1",
+    "type": "custom_font",
+    "script_type": "avestan",
+    "font_path": "alphabet_data/fonts/NotoSansAvestan-Regular.ttf",
+    "character_mapping": "avestan",
+    "enabled": true
+  },
+  "noto_sans_deseret_1": {
+    "name": "Noto Sans Deseret_1",
+    "type": "custom_font",
+    "script_type": "deseret",
+    "font_path": "alphabet_data/fonts/NotoSansDeseret-Regular.ttf",
+    "character_mapping": "deseret",
+    "enabled": true
+  },
+  "noto_sans_georgian_1": {
+    "name": "Noto Sans Georgian_1",
+    "type": "custom_font",
+    "script_type": "georgian_modern",
+    "font_path": "alphabet_data/fonts/NotoSansGeorgian-VariableFont_wdth,wght.ttf",
+    "character_mapping": "georgian_modern",
+    "enabled": true
+  },
+  "noto_sans_osage_1": {
+    "name": "Noto Sans Osage_1",
+    "type": "custom_font",
+    "script_type": "osage",
+    "font_path": "alphabet_data/fonts/NotoSansOsage-Regular.ttf",
+    "character_mapping": "osage",
+    "enabled": true
+  },
+  "noto_serif_georgian_1": {
+    "name": "Noto Serif Georgian_1",
+    "type": "custom_font",
+    "script_type": "georgian_modern",
+    "font_path": "alphabet_data/fonts/NotoSerifGeorgian-VariableFont_wdth,wght.ttf",
+    "character_mapping": "georgian_modern",
+    "enabled": true
+  }
+}
