@@ -1,0 +1,70 @@
+✅ Phase 0 Exit Checklist (Geometry & Topology Extraction)
+A. Required Artifacts
+
+ Normalized SVG paths for all attempted glyphs
+
+ Arc-length sample arrays saved
+
+ Raster images saved
+
+ Skeleton images saved (where successful)
+
+ metadata.json with per-glyph + per-font stats
+
+B. Invariants
+
+ Normalization is glyph-local (not alphabet-relative)
+
+ Sampling is arc-length based (not parametric)
+
+ Skeletonization operates on filled glyphs
+
+ No ML, no learned parameters
+
+C. Metrics
+
+ Per-glyph:
+
+arc length
+
+aspect ratio
+
+skeleton pixel count
+
+components / endpoints / junctions
+
+ Alphabet-level aggregates computed
+
+ Junction degree histogram present
+
+D. Failures & Blockers
+
+ List of glyphs with:
+
+missing paths
+
+zero-length paths
+
+skeleton failure
+
+ Corner cases documented (e.g. g, Q, y, S)
+
+ Reasons hypothesized (not guessed)
+
+E. Validation Evidence
+
+ At least one font with:
+
+clean skeletons
+
+broken skeletons
+
+ Side-by-side raster vs skeleton images saved
+
+ One example where topology is clearly wrong
+
+F. Disallowed States
+
+ Any skeleton fix without logging → STOP
+
+ Any font-wide normalization → STOP
