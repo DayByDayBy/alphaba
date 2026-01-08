@@ -146,6 +146,10 @@ class AlphabetEncoder(tf.keras.Model):
         super().__init__()
         self.glyph_encoder = GlyphEncoder(feature_dim=128)
         
+        # Glyph-type embedding: distinguish uppercase (0-25) vs lowercase (26-51)
+        # Helps model learn baseline/height differences
+        self.glyph_type_embedding = layers.Embedding(2, 16)  # 0=upper, 1=lower
+        
         # Per-glyph transform (φ in DeepSets)
         self.phi = tf.keras.Sequential([
             layers.Dense(256, activation='relu'),
@@ -168,6 +172,17 @@ class AlphabetEncoder(tf.keras.Model):
         glyph_features = self.glyph_encoder(flat)  # (batch*n_glyphs, 128)
         glyph_features = tf.reshape(glyph_features, (batch_size, n_glyphs, -1))
         
+        # Add glyph-type embedding (upper=0 for indices 0-25, lower=1 for 26-51)
+        glyph_types = tf.concat([
+            tf.zeros(26, dtype=tf.int32),   # A-Z
+            tf.ones(26, dtype=tf.int32)     # a-z
+        ], axis=0)
+        glyph_types = tf.tile(glyph_types[None, :], [batch_size, 1])  # (batch, 52)
+        type_emb = self.glyph_type_embedding(glyph_types)  # (batch, 52, 16)
+        
+        # Concatenate glyph features with type embedding
+        glyph_features = tf.concat([glyph_features, type_emb], axis=-1)  # (batch, 52, 144)
+        
         # Apply φ to each glyph
         transformed = self.phi(glyph_features)  # (batch, n_glyphs, 256)
         
@@ -177,6 +192,8 @@ class AlphabetEncoder(tf.keras.Model):
         # Apply ρ to get style vector
         return self.rho(aggregated)  # (batch, style_dim)
 ```
+
+**Note**: The glyph-type embedding helps the model distinguish uppercase/lowercase baseline and height differences, which is crucial for coherent alphabet generation.
 
 ---
 
@@ -244,6 +261,39 @@ def chamfer_distance(pred, target):
     # Chamfer = mean of both directions
     return tf.reduce_mean(min_pred_to_target) + tf.reduce_mean(min_target_to_pred)
 ```
+
+### 3.3 Alternative: Earth Mover's Distance (EMD)
+
+EMD can give more structured reconstructions but is computationally heavier:
+
+```python
+def earth_mover_distance(pred, target):
+    """Compute approximate EMD via Sinkhorn iterations.
+    
+    More expensive than Chamfer but often gives better structure.
+    Use for validation or final training stages.
+    """
+    # Compute pairwise distance matrix
+    pred_exp = tf.expand_dims(pred, 2)
+    target_exp = tf.expand_dims(target, 1)
+    cost_matrix = tf.reduce_sum(tf.square(pred_exp - target_exp), axis=-1)
+    
+    # Sinkhorn iterations for optimal transport
+    n = tf.shape(pred)[1]
+    epsilon = 0.01  # Regularization
+    
+    K = tf.exp(-cost_matrix / epsilon)
+    u = tf.ones((tf.shape(pred)[0], n, 1)) / tf.cast(n, tf.float32)
+    
+    for _ in range(50):  # Sinkhorn iterations
+        v = 1.0 / (tf.matmul(K, u, transpose_a=True) + 1e-8)
+        u = 1.0 / (tf.matmul(K, v) + 1e-8)
+    
+    transport = u * K * tf.transpose(v, [0, 2, 1])
+    return tf.reduce_sum(transport * cost_matrix, axis=[1, 2])
+```
+
+**Recommendation**: Start with Chamfer (faster iteration), switch to EMD for fine-tuning if needed.
 
 ---
 
@@ -345,23 +395,72 @@ def style_triplet_loss(anchor_style, positive_style, negative_style, margin=0.5)
 
 ### 5.2 VAE Regularization (Optional)
 
-Add KL divergence to encourage smooth latent space:
+Add KL divergence to encourage smooth latent space.
+
+**Important**: `mu` and `log_var` must be **separate heads** from the main encoder output to allow proper KL computation:
 
 ```python
 class AlphabetVAE(tf.keras.Model):
-    def encode(self, alphabet):
-        features = self.encoder_base(alphabet)
-        mu = self.fc_mu(features)
-        log_var = self.fc_logvar(features)
+    def __init__(self, style_dim=128, n_points=256, n_glyphs=52):
+        super().__init__()
         
-        # Reparameterization
+        # Base encoder (outputs features, not style directly)
+        self.encoder_base = AlphabetEncoderBase(feature_dim=256)
+        
+        # Separate heads for mu and log_var
+        self.fc_mu = layers.Dense(style_dim)
+        self.fc_logvar = layers.Dense(style_dim)
+        
+        self.decoder = GlyphDecoder(n_points=n_points, style_dim=style_dim)
+        self.style_dim = style_dim
+    
+    def encode(self, alphabet):
+        """Encode alphabet to latent distribution parameters."""
+        features = self.encoder_base(alphabet)  # (batch, 256)
+        
+        # Separate heads for mean and variance
+        mu = self.fc_mu(features)               # (batch, style_dim)
+        log_var = self.fc_logvar(features)      # (batch, style_dim)
+        
+        # Reparameterization trick
         eps = tf.random.normal(tf.shape(mu))
         z = mu + tf.exp(0.5 * log_var) * eps
         
         return z, mu, log_var
     
     def kl_loss(self, mu, log_var):
-        return -0.5 * tf.reduce_mean(1 + log_var - tf.square(mu) - tf.exp(log_var))
+        """KL divergence from N(mu, sigma) to N(0, 1)."""
+        return -0.5 * tf.reduce_mean(
+            tf.reduce_sum(1 + log_var - tf.square(mu) - tf.exp(log_var), axis=-1)
+        )
+    
+    def call(self, alphabet, glyph_ids, training=True):
+        z, mu, log_var = self.encode(alphabet)
+        pred_glyphs = self.decoder(z, glyph_ids)
+        
+        if training:
+            return pred_glyphs, mu, log_var
+        return pred_glyphs
+```
+
+**Training with KL loss**:
+
+```python
+@tf.function
+def train_step_vae(model, optimizer, alphabet_batch, target_glyphs, glyph_ids, beta=0.1):
+    with tf.GradientTape() as tape:
+        pred_glyphs, mu, log_var = model(alphabet_batch, glyph_ids, training=True)
+        
+        recon_loss = chamfer_distance(pred_glyphs, target_glyphs)
+        kl_loss = model.kl_loss(mu, log_var)
+        
+        # Beta-VAE style weighting (start low, increase gradually)
+        total_loss = recon_loss + beta * kl_loss
+    
+    gradients = tape.gradient(total_loss, model.trainable_variables)
+    optimizer.apply_gradients(zip(gradients, model.trainable_variables))
+    
+    return {'recon_loss': recon_loss, 'kl_loss': kl_loss, 'total_loss': total_loss}
 ```
 
 ---
@@ -418,7 +517,7 @@ def sample_novel_alphabet(model, n_samples=1):
 ### Metrics
 
 ```python
-def evaluate_model(model, test_alphabets):
+def evaluate_model(model, test_alphabets, train_alphabets, topology_data):
     metrics = {}
     
     # 1. Reconstruction error
@@ -431,13 +530,72 @@ def evaluate_model(model, test_alphabets):
     metrics['mean_recon_error'] = np.mean(recon_errors)
     
     # 2. Novelty (distance to nearest training glyph)
-    # ...
+    generated = sample_novel_alphabet(model, n_samples=10)
+    min_dists = []
+    for gen_alph in generated:
+        for glyph in gen_alph:
+            dists = [chamfer_distance(glyph[None], train_g[None]) 
+                     for train_alph in train_alphabets for train_g in train_alph]
+            min_dists.append(min(dists))
+    metrics['mean_novelty'] = np.mean(min_dists)
     
-    # 3. Intra-alphabet consistency
-    # ...
+    # 3. Intra-alphabet consistency (using style embeddings)
+    style_vars = []
+    for alphabet in test_alphabets:
+        # Encode subsets of glyphs, check style variance
+        styles = []
+        for _ in range(10):
+            subset_idx = np.random.choice(52, 26, replace=False)
+            subset = alphabet[subset_idx]
+            style = model.encode(subset[None])[0]  # Just mu
+            styles.append(style)
+        style_vars.append(np.var(styles, axis=0).mean())
+    metrics['style_consistency'] = 1.0 / (1.0 + np.mean(style_vars))
     
     return metrics
 ```
+
+### Stroke Consistency Metrics (from Phase 0)
+
+Leverage topology data extracted in Phase 0:
+
+```python
+def evaluate_stroke_consistency(generated_glyphs, topology_data):
+    """Compare generated glyph topology to training distribution.
+    
+    Uses junction counts, endpoint counts, and aspect ratios from Phase 0.
+    """
+    metrics = {}
+    
+    # Rasterize generated glyphs and extract skeletons
+    gen_topology = []
+    for glyph_points in generated_glyphs:
+        # Rasterize points to image
+        img = points_to_raster(glyph_points, size=512)
+        skeleton = skeletonize(img > 0)
+        topo = analyze_skeleton_topology(skeleton)
+        gen_topology.append(topo)
+    
+    # Compare to training topology distributions
+    train_junctions = [t['junctions'] for t in topology_data]
+    gen_junctions = [t['junctions'] for t in gen_topology]
+    
+    train_endpoints = [t['endpoints'] for t in topology_data]
+    gen_endpoints = [t['endpoints'] for t in gen_topology]
+    
+    # Wasserstein distance between distributions
+    from scipy.stats import wasserstein_distance
+    metrics['junction_dist'] = wasserstein_distance(train_junctions, gen_junctions)
+    metrics['endpoint_dist'] = wasserstein_distance(train_endpoints, gen_endpoints)
+    
+    # Aspect ratio consistency within alphabet
+    gen_aspects = [compute_aspect_ratio(g) for g in generated_glyphs]
+    metrics['aspect_std'] = np.std(gen_aspects)  # Lower = more consistent
+    
+    return metrics
+```
+
+**Why this matters**: Generated alphabets should have similar topological properties to real alphabets — similar numbers of strokes, junctions, and consistent proportions.
 
 ---
 
