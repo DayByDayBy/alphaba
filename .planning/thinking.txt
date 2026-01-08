@@ -1,0 +1,22 @@
+1. Font Parsing - Composite Handling
+
+Composite glyphs must be fully resolved into concrete contours before path construction. The returned Path may contain multiple subpaths (for glyphs like 'i', 'j', or '%').
+
+2. Normalization Scope
+
+Normalization is glyph-local, not alphabet-relative. Cross-glyph alignment is deferred to Phase 1+.
+
+3. Rasterization - Stroke Semantics
+
+Stroke is additive, never substitutive. Stroke width is specified in output pixel space, not font units.
+
+4. Skeletonization - Topology Limits
+
+Skeletonization operates on connected components independently. Topology is preserved only insofar as the raster permits—discretization limits are acknowledged, not fought.
+
+5. Glyph Set (Runtime Decision)
+For this implementation, I'll default to:
+
+A-Z + a-z (52 glyphs)
+Punctuation excluded for Phase 0
+Multi-component glyphs (i, j, %) handled naturally via n_components
