@@ -53,6 +53,10 @@ GLYPH_SET = [chr(i) for i in range(ord('A'), ord('Z') + 1)] + \
 # 1. FONT PARSING
 # ============================================================================
 
+import re
+_SVG_FLOAT_PATTERN = re.compile(r'-?\d+\.\d+(?:e[+-]?\d+)?')
+
+
 def normalize_svg_precision(path_string: str, precision: int = 12) -> str:
     """
     Normalize floating-point precision in SVG path string.
@@ -60,10 +64,9 @@ def normalize_svg_precision(path_string: str, precision: int = 12) -> str:
     Ensures consistent precision to avoid floating-point mismatches
     between start/end coordinates of closed subpaths.
     """
-    import re
     def round_match(m):
         return f"{float(m.group()):.{precision}g}"
-    return re.sub(r'-?\d+\.\d+(?:e[+-]?\d+)?', round_match, path_string)
+    return _SVG_FLOAT_PATTERN.sub(round_match, path_string)
 
 
 def pen_value_to_svg_path_string(pen_value: List[Tuple[str, Tuple]]) -> str:
@@ -183,14 +186,14 @@ def glyph_to_path(ttf_path: str, glyph_char: str) -> Optional[SVGPath]:
         return path
         
     except Exception as e:
-        logger.error(f"Failed to extract path for '{glyph_name}': {e}")
+        logger.error(f"Failed to extract path for '{glyph_char}': {e}")
         return None
 
 
 CORNER_CASE_GLYPHS = ['g', 'Q', 'y', 'S', '@', '&']
 
 
-def extract_font_metrics(ttf_path: str) -> Dict[str, Any]:
+def extract_font_metrics(ttf_path: str) -> Optional[Dict[str, Any]]:
     """
     Extract font-level metrics for alphabet-relative normalization.
     

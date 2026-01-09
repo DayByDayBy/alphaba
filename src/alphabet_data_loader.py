@@ -58,6 +58,27 @@ class AlphabetDataLoader:
             try:
                 samples = np.load(samples_file)
                 
+                # Validate tensor shape
+                if samples.ndim != 3:
+                    logger.warning(
+                        f"Skipping {font_dir.name}: expected 3D tensor, got {samples.ndim}D"
+                    )
+                    continue
+                
+                n_glyphs_actual, n_points_actual, n_coords = samples.shape
+                
+                if n_coords != 2:
+                    logger.warning(
+                        f"Skipping {font_dir.name}: expected 2 coordinates, got {n_coords}"
+                    )
+                    continue
+                
+                if n_points_actual != self.n_points:
+                    logger.warning(
+                        f"Skipping {font_dir.name}: n_points mismatch (expected {self.n_points}, got {n_points_actual})"
+                    )
+                    continue
+                
                 glyph_order = None
                 if glyph_order_file.exists():
                     with open(glyph_order_file) as f:
@@ -73,7 +94,9 @@ class AlphabetDataLoader:
                     'path': font_dir,
                     'samples': samples,
                     'glyph_order': glyph_order,
-                    'metadata': metadata
+                    'metadata': metadata,
+                    'n_glyphs': n_glyphs_actual,
+                    'n_points': n_points_actual
                 })
                 
                 logger.info(f"Loaded font: {font_dir.name} with shape {samples.shape}")
@@ -91,9 +114,17 @@ class AlphabetDataLoader:
         return self.fonts[idx]['samples']
     
     def get_all_alphabets(self) -> np.ndarray:
-        """Stack all alphabets into single tensor."""
+        """
+        Stack all alphabets into single tensor.
+        
+        Returns:
+            (n_fonts, n_glyphs, n_points, 2) tensor
+        
+        Raises:
+            ValueError: If no fonts are loaded
+        """
         if not self.fonts:
-            return np.array([])
+            raise ValueError("No fonts loaded")
         return np.stack([f['samples'] for f in self.fonts], axis=0)
     
     def create_dataset(
@@ -110,10 +141,7 @@ class AlphabetDataLoader:
             - glyph_id: (batch,) random glyph indices
             - target_glyph: (batch, n_points, 2) corresponding glyph
         """
-        all_alphabets = self.get_all_alphabets()
-        
-        if len(all_alphabets) == 0:
-            raise ValueError("No alphabets loaded")
+        all_alphabets = self.get_all_alphabets()  # Raises ValueError if empty
         
         n_alphabets = len(all_alphabets)
         
@@ -136,14 +164,14 @@ class AlphabetDataLoader:
                         target_glyph.astype(np.float32)
                     )
         
-        n_glyphs_actual = all_alphabets.shape[1]
+        n_glyphs_actual, n_points_actual, _ = all_alphabets.shape[1:]
         
         dataset = tf.data.Dataset.from_generator(
             generator,
             output_signature=(
-                tf.TensorSpec(shape=(n_glyphs_actual, self.n_points, 2), dtype=tf.float32),
+                tf.TensorSpec(shape=(n_glyphs_actual, n_points_actual, 2), dtype=tf.float32),
                 tf.TensorSpec(shape=(), dtype=tf.int32),
-                tf.TensorSpec(shape=(self.n_points, 2), dtype=tf.float32)
+                tf.TensorSpec(shape=(n_points_actual, 2), dtype=tf.float32)
             )
         )
         
