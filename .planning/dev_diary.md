@@ -49,3 +49,23 @@ Each entry is automatically generated during implementation.
 - Phase 0 status: **PASS** — architecture sound, parsing needs fix
 
 **Limitation**: This checklist reflects only GoogleSans font; additional fonts may reveal new edge cases.
+
+---
+
+### 2026-01-09 - Step P1.01: Add Missing Pipeline Dependencies
+
+**Changed**: Verified required dependencies in `pyproject.toml` — fonttools, svgpathtools, cairosvg, pillow, scikit-image, scipy, pytest.
+
+**Why**: The pipeline imports these libraries at runtime; declaring them in `pyproject.toml` makes execution deterministic under `uv`.
+
+**Limitation**: None. All dependencies already present and validated.
+
+---
+
+### 2026-01-09 - Step P1.02: Resolve Glyph Characters via cmap
+
+**Changed**: Updated `src/alphabet_pipeline.py:glyph_to_path()` to resolve Unicode characters through the font cmap before extracting outlines.
+
+**Why**: Coverage validation and corner-case glyph checks use characters (e.g. `@`) that often do not match font-internal glyph names.
+
+**Limitation**: Fonts with incomplete cmap tables may still be missing expected characters.

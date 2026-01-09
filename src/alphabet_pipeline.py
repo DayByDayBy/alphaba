@@ -53,7 +53,7 @@ GLYPH_SET = [chr(i) for i in range(ord('A'), ord('Z') + 1)] + \
 # 1. FONT PARSING
 # ============================================================================
 
-def glyph_to_path(ttf_path: str, glyph_name: str) -> Optional[SVGPath]:
+def glyph_to_path(ttf_path: str, glyph_char: str) -> Optional[SVGPath]:
     """
     Extract vector path from TTF glyph.
     
@@ -62,7 +62,7 @@ def glyph_to_path(ttf_path: str, glyph_name: str) -> Optional[SVGPath]:
     
     Args:
         ttf_path: Path to .ttf file
-        glyph_name: Glyph name (e.g. 'A', 'a')
+        glyph_char: Unicode character (e.g. 'A', 'a', '@')
     
     Returns:
         svgpathtools.Path or None if glyph doesn't exist
@@ -71,8 +71,18 @@ def glyph_to_path(ttf_path: str, glyph_name: str) -> Optional[SVGPath]:
         font = TTFont(ttf_path)
         glyph_set = font.getGlyphSet()
         
+        # Resolve Unicode character to glyph name via cmap
+        cmap = font.getBestCmap()
+        codepoint = ord(glyph_char)
+        
+        if codepoint not in cmap:
+            logger.warning(f"Character '{glyph_char}' (U+{codepoint:04X}) not in font cmap")
+            return None
+        
+        glyph_name = cmap[codepoint]
+        
         if glyph_name not in glyph_set:
-            logger.warning(f"Glyph '{glyph_name}' not found in font")
+            logger.warning(f"Glyph '{glyph_name}' for '{glyph_char}' not found in font")
             return None
         
         # Use RecordingPen to capture path operations
