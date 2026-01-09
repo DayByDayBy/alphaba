@@ -177,6 +177,47 @@ def glyph_to_path(ttf_path: str, glyph_char: str) -> Optional[SVGPath]:
 CORNER_CASE_GLYPHS = ['g', 'Q', 'y', 'S', '@', '&']
 
 
+def extract_font_metrics(ttf_path: str) -> Dict[str, Any]:
+    """
+    Extract font-level metrics for alphabet-relative normalization.
+    
+    Returns:
+        Dict with 'units_per_em', 'ascender', 'descender', 'cap_height', 'x_height'
+    """
+    try:
+        font = TTFont(ttf_path)
+        
+        # Get head table for units per em
+        units_per_em = font['head'].unitsPerEm
+        
+        # Get OS/2 table for typographic metrics
+        os2 = font.get('OS/2')
+        if os2:
+            ascender = os2.sTypoAscender
+            descender = os2.sTypoDescender
+            cap_height = getattr(os2, 'sCapHeight', None) or ascender
+            x_height = getattr(os2, 'sxHeight', None) or int(ascender * 0.5)
+        else:
+            # Fallback to hhea table
+            hhea = font['hhea']
+            ascender = hhea.ascent
+            descender = hhea.descent
+            cap_height = ascender
+            x_height = int(ascender * 0.5)
+        
+        return {
+            'units_per_em': units_per_em,
+            'ascender': ascender,
+            'descender': descender,
+            'cap_height': cap_height,
+            'x_height': x_height,
+            'total_height': ascender - descender
+        }
+    except Exception as e:
+        logger.error(f"Failed to extract font metrics: {e}")
+        return None
+
+
 def validate_corner_case_glyphs(ttf_path: str, corner_cases: List[str] = CORNER_CASE_GLYPHS) -> Dict[str, Any]:
     """
     Validate that corner-case glyphs parse correctly.

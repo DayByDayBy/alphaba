@@ -121,3 +121,13 @@ Each entry is automatically generated during implementation.
 **Why**: Provides a quick smoke test for complex contours (descenders, loops) that historically caused parsing failures.
 
 **Limitation**: Corner-case list is Latin-centric; may need expansion for other scripts.
+
+---
+
+### 2026-01-09 - Step P1.08: Add Font Metrics Extraction Helper
+
+**Changed**: Added `src/alphabet_pipeline.py:extract_font_metrics()` to retrieve `units_per_em`, `ascender`, `descender`, `cap_height`, `x_height`, `total_height`.
+
+**Why**: Required for alphabet-relative normalization — all glyphs must be scaled relative to the same font metrics.
+
+**Limitation**: Relies on OS/2 or hhea tables; malformed fonts may return incorrect values.
