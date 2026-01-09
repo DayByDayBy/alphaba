@@ -562,6 +562,12 @@ def process_font(
     font_name = Path(ttf_path).stem
     logger.info(f"Processing font: {font_name}")
     
+    # Validate font coverage
+    coverage = validate_font_coverage(ttf_path, glyph_set)
+    logger.info(f"  Coverage: {coverage['coverage_ratio']:.1%} ({len(coverage['covered'])}/{len(glyph_set)})")
+    if coverage['missing']:
+        logger.warning(f"  Missing characters: {coverage['missing']}")
+    
     # Create output directories
     base_path = Path(output_dir) / font_name
     (base_path / 'vectors').mkdir(parents=True, exist_ok=True)
