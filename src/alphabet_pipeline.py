@@ -174,6 +174,40 @@ def glyph_to_path(ttf_path: str, glyph_char: str) -> Optional[SVGPath]:
         return None
 
 
+CORNER_CASE_GLYPHS = ['g', 'Q', 'y', 'S', '@', '&']
+
+
+def validate_corner_case_glyphs(ttf_path: str, corner_cases: List[str] = CORNER_CASE_GLYPHS) -> Dict[str, Any]:
+    """
+    Validate that corner-case glyphs parse correctly.
+    
+    These glyphs often have complex contours (descenders, multiple loops, etc.)
+    that stress-test the path extraction logic.
+    
+    Args:
+        ttf_path: Path to .ttf file
+        corner_cases: List of corner-case characters to test
+    
+    Returns:
+        Dict with 'passed', 'failed', 'pass_ratio' keys
+    """
+    passed = []
+    failed = []
+    
+    for char in corner_cases:
+        path = glyph_to_path(ttf_path, char)
+        if path is not None and path.length() > 0:
+            passed.append(char)
+        else:
+            failed.append(char)
+    
+    return {
+        'passed': passed,
+        'failed': failed,
+        'pass_ratio': len(passed) / len(corner_cases) if corner_cases else 0.0
+    }
+
+
 def validate_font_coverage(ttf_path: str, required_chars: List[str]) -> Dict[str, Any]:
     """
     Validate that a font covers the required character set.

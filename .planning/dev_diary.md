@@ -111,3 +111,13 @@ Each entry is automatically generated during implementation.
 **Why**: Provides early feedback on font coverage before processing begins.
 
 **Limitation**: None identified.
+
+---
+
+### 2026-01-09 - Step P1.07: Add Corner-case Glyph Validation Helper
+
+**Changed**: Added `src/alphabet_pipeline.py:validate_corner_case_glyphs()` and `CORNER_CASE_GLYPHS` constant.
+
+**Why**: Provides a quick smoke test for complex contours (descenders, loops) that historically caused parsing failures.
+
+**Limitation**: Corner-case list is Latin-centric; may need expansion for other scripts.
