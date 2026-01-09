@@ -215,3 +215,13 @@ Each entry is automatically generated during implementation.
 - SVG files have normalized precision and trailing newlines
 
 **Limitation**: 2 glyphs still fail (likely special characters outside A-Za-z range).
+
+---
+
+### 2026-01-09 - Step P2.01: Create Data Loader for Alphabet Tensors
+
+**Changed**: Created `src/alphabet_data_loader.py` with `AlphabetDataLoader` class.
+
+**Why**: Provides TensorFlow-compatible dataset for training generative models on Phase 1 outputs.
+
+**Limitation**: Currently only 1 font available; will need more fonts for meaningful training.
