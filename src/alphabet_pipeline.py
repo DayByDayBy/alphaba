@@ -53,6 +53,19 @@ GLYPH_SET = [chr(i) for i in range(ord('A'), ord('Z') + 1)] + \
 # 1. FONT PARSING
 # ============================================================================
 
+def normalize_svg_precision(path_string: str, precision: int = 12) -> str:
+    """
+    Normalize floating-point precision in SVG path string.
+    
+    Ensures consistent precision to avoid floating-point mismatches
+    between start/end coordinates of closed subpaths.
+    """
+    import re
+    def round_match(m):
+        return f"{float(m.group()):.{precision}g}"
+    return re.sub(r'-?\d+\.\d+(?:e[+-]?\d+)?', round_match, path_string)
+
+
 def pen_value_to_svg_path_string(pen_value: List[Tuple[str, Tuple]]) -> str:
     """
     Convert RecordingPen.value to an SVG path string.
@@ -773,9 +786,10 @@ def process_font(
         if normalized_path is None:
             continue
         
-        # Save vector path
+        # Save vector path (with normalized precision and trailing newline)
+        path_string = normalize_svg_precision(normalized_path.d())
         with open(base_path / 'vectors' / f'{glyph_name}.svgpath.txt', 'w') as f:
-            f.write(normalized_path.d())
+            f.write(path_string + '\n')
         
         # Save samples in normalized coordinate space
         normalized_samples = arc_length_sample(normalized_path)
