@@ -33,3 +33,19 @@ Each entry is automatically generated during implementation.
 **Files to touch in Phase 2**: `src/alphabet_encoder.py`, `src/glyph_decoder.py`, `src/alphabet_vae.py`, `src/generative_training.py`, `src/generative_eval.py`, notebooks
 
 **Limitation**: None identified.
+
+---
+
+### 2026-01-09 - Step P0.03: Phase 0 Exit Checklist
+
+**Changed**: Created `.planning/phase0_exit_checklist.md` and recorded PASS/FAIL/N/A for Phase 0 invariants and artifacts.
+
+**Why**: Phase 1 modifies pipeline behavior. Capturing Phase 0 status first provides a baseline and prevents regressions from being mistaken for Phase 0 failures.
+
+**Key Findings**:
+- Pipeline produces valid artifacts for 28/52 glyphs (54% coverage)
+- qCurveTo bug causes remaining failures (planned fix: P1.02–P1.04)
+- All "Disallowed States" items PASS
+- Phase 0 status: **PASS** — architecture sound, parsing needs fix
+
+**Limitation**: This checklist reflects only GoogleSans font; additional fonts may reveal new edge cases.
