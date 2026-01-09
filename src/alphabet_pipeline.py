@@ -702,6 +702,13 @@ def process_font(
     if coverage['missing']:
         logger.warning(f"  Missing characters: {coverage['missing']}")
     
+    # Extract font metrics for alphabet-relative normalization
+    font_metrics = extract_font_metrics(ttf_path)
+    if font_metrics is None:
+        logger.error("Failed to extract font metrics")
+        return {'error': 'Failed to extract font metrics'}
+    logger.info(f"  Font metrics: ascender={font_metrics['ascender']}, descender={font_metrics['descender']}, total_height={font_metrics['total_height']}")
+    
     # Create output directories
     base_path = Path(output_dir) / font_name
     (base_path / 'vectors').mkdir(parents=True, exist_ok=True)
@@ -724,8 +731,8 @@ def process_font(
         if not samples:
             continue
         
-        # 3. Normalize
-        normalized_path = normalize_path(path, samples)
+        # 3. Normalize (alphabet-relative)
+        normalized_path = normalize_path_alphabet_relative(path, samples, font_metrics)
         if normalized_path is None:
             continue
         

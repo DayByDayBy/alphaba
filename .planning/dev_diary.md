@@ -141,3 +141,13 @@ Each entry is automatically generated during implementation.
 **Why**: Preserves inter-glyph scale relationships (M vs i) critical for alphabet-level style learning.
 
 **Limitation**: Assumes font metrics are accurate; may produce unexpected results for non-standard fonts.
+
+---
+
+### 2026-01-09 - Step P1.10: Use Alphabet-Relative Normalization in process_font()
+
+**Changed**: Modified `src/alphabet_pipeline.py:process_font()` to extract font metrics at start and use `normalize_path_alphabet_relative()` instead of `normalize_path()`.
+
+**Why**: Switches pipeline from glyph-local to alphabet-relative normalization, preserving inter-glyph scale.
+
+**Limitation**: Existing glyph-local normalization retained for backward compatibility but no longer used in main pipeline.
