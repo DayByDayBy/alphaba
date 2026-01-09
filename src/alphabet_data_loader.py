@@ -7,12 +7,21 @@ Loads processed font data from Phase 1 pipeline outputs for generative model tra
 import json
 import logging
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple, TypedDict
 
 import numpy as np
+from numpy.typing import NDArray
 import tensorflow as tf
 
 logger = logging.getLogger(__name__)
+
+
+class FontEntry(TypedDict):
+    name: str
+    path: Path
+    samples: NDArray[np.floating]
+    glyph_order: Optional[List[str]]
+    metadata: Optional[Dict[str, Any]]
 
 
 class AlphabetDataLoader:
@@ -34,7 +43,7 @@ class AlphabetDataLoader:
         self.n_points = n_points
         self.n_glyphs = n_glyphs
         
-        self.fonts: List[Dict] = []
+        self.fonts: List[FontEntry] = []
         self._load_fonts()
     
     def _load_fonts(self) -> None:
@@ -79,6 +88,12 @@ class AlphabetDataLoader:
                     )
                     continue
                 
+                if n_glyphs_actual != self.n_glyphs:
+                    logger.warning(
+                        f"Skipping {font_dir.name}: n_glyphs mismatch (expected {self.n_glyphs}, got {n_glyphs_actual})"
+                    )
+                    continue
+                
                 glyph_order = None
                 if glyph_order_file.exists():
                     with open(glyph_order_file) as f:
@@ -94,9 +109,7 @@ class AlphabetDataLoader:
                     'path': font_dir,
                     'samples': samples,
                     'glyph_order': glyph_order,
-                    'metadata': metadata,
-                    'n_glyphs': n_glyphs_actual,
-                    'n_points': n_points_actual
+                    'metadata': metadata
                 })
                 
                 logger.info(f"Loaded font: {font_dir.name} with shape {samples.shape}")
@@ -109,11 +122,11 @@ class AlphabetDataLoader:
     def __len__(self) -> int:
         return len(self.fonts)
     
-    def get_alphabet(self, idx: int) -> np.ndarray:
+    def get_alphabet(self, idx: int) -> NDArray[np.floating]:
         """Get single alphabet tensor by index."""
         return self.fonts[idx]['samples']
     
-    def get_all_alphabets(self) -> np.ndarray:
+    def get_all_alphabets(self) -> NDArray[np.floating]:
         """
         Stack all alphabets into single tensor.
         
@@ -164,14 +177,12 @@ class AlphabetDataLoader:
                         target_glyph.astype(np.float32)
                     )
         
-        n_glyphs_actual, n_points_actual, _ = all_alphabets.shape[1:]
-        
         dataset = tf.data.Dataset.from_generator(
             generator,
             output_signature=(
-                tf.TensorSpec(shape=(n_glyphs_actual, n_points_actual, 2), dtype=tf.float32),
+                tf.TensorSpec(shape=(self.n_glyphs, self.n_points, 2), dtype=tf.float32),
                 tf.TensorSpec(shape=(), dtype=tf.int32),
-                tf.TensorSpec(shape=(n_points_actual, 2), dtype=tf.float32)
+                tf.TensorSpec(shape=(self.n_points, 2), dtype=tf.float32)
             )
         )
         
@@ -208,7 +219,7 @@ class AlphabetDataLoader:
         return train_loader, val_loader
 
 
-def load_single_alphabet(font_path: str) -> Optional[np.ndarray]:
+def load_single_alphabet(font_path: str) -> Optional[NDArray[np.floating]]:
     """Load alphabet tensor from a single font output directory."""
     font_dir = Path(font_path)
     samples_file = font_dir / 'alphabet_samples.npy'
@@ -216,5 +227,9 @@ def load_single_alphabet(font_path: str) -> Optional[np.ndarray]:
     if not samples_file.exists():
         logger.error(f"No alphabet_samples.npy in {font_path}")
         return None
-    
-    return np.load(samples_file)
+
+    samples = np.load(samples_file)
+    if samples.ndim != 3 or samples.shape[-1] != 2:
+        raise ValueError(f"Invalid alphabet tensor shape {samples.shape} in {font_path}")
+
+    return samples

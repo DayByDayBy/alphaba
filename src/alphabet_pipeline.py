@@ -54,7 +54,7 @@ GLYPH_SET = [chr(i) for i in range(ord('A'), ord('Z') + 1)] + \
 # ============================================================================
 
 import re
-_SVG_FLOAT_PATTERN = re.compile(r'-?\d+\.\d+(?:e[+-]?\d+)?')
+_SVG_FLOAT_PATTERN = re.compile(r'[+-]?(?:\d*\.\d+|\d+\.?\d*)(?:[eE][+-]?\d+)?')
 
 
 def normalize_svg_precision(path_string: str, precision: int = 12) -> str:
