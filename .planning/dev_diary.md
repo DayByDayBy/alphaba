@@ -151,3 +151,13 @@ Each entry is automatically generated during implementation.
 **Why**: Switches pipeline from glyph-local to alphabet-relative normalization, preserving inter-glyph scale.
 
 **Limitation**: Existing glyph-local normalization retained for backward compatibility but no longer used in main pipeline.
+
+---
+
+### 2026-01-09 - Step P1.11: Save Point Samples in Normalized Coordinate Space
+
+**Changed**: Modified `src/alphabet_pipeline.py:process_font()` to re-sample the normalized path rather than saving raw samples.
+
+**Why**: Ensures saved `*_samples.npy` files contain coordinates consistent with the normalized vector path.
+
+**Limitation**: Extra `arc_length_sample()` call per glyph adds minor overhead.

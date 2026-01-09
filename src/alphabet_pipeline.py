@@ -740,8 +740,9 @@ def process_font(
         with open(base_path / 'vectors' / f'{glyph_name}.svgpath.txt', 'w') as f:
             f.write(normalized_path.d())
         
-        # Save samples
-        samples_array = np.array([[p.real, p.imag] for p in samples])
+        # Save samples in normalized coordinate space
+        normalized_samples = arc_length_sample(normalized_path)
+        samples_array = np.array([[p.real, p.imag] for p in normalized_samples])
         np.save(base_path / 'samples' / f'{glyph_name}_samples.npy', samples_array)
         
         # 4. Rasterize
