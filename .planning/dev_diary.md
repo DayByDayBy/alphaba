@@ -91,3 +91,13 @@ Each entry is automatically generated during implementation.
 **Validated**: `g`, `Q`, `y`, `S`, `@`, `&` now all parse successfully (previously failed).
 
 **Limitation**: Extremely unusual contour structures (e.g. entirely off-curve) are untested.
+
+---
+
+### 2026-01-09 - Step P1.05: Add Font Coverage Validation Helper
+
+**Changed**: Added `src/alphabet_pipeline.py:validate_font_coverage()` to check character coverage before processing.
+
+**Why**: Prevents silent failures by identifying missing characters up front.
+
+**Limitation**: None identified.

@@ -174,6 +174,41 @@ def glyph_to_path(ttf_path: str, glyph_char: str) -> Optional[SVGPath]:
         return None
 
 
+def validate_font_coverage(ttf_path: str, required_chars: List[str]) -> Dict[str, Any]:
+    """
+    Validate that a font covers the required character set.
+    
+    Args:
+        ttf_path: Path to .ttf file
+        required_chars: List of Unicode characters to check
+    
+    Returns:
+        Dict with 'covered', 'missing', 'coverage_ratio' keys
+    """
+    try:
+        font = TTFont(ttf_path)
+        cmap = font.getBestCmap()
+        
+        covered = []
+        missing = []
+        
+        for char in required_chars:
+            codepoint = ord(char)
+            if codepoint in cmap:
+                covered.append(char)
+            else:
+                missing.append(char)
+        
+        return {
+            'covered': covered,
+            'missing': missing,
+            'coverage_ratio': len(covered) / len(required_chars) if required_chars else 0.0
+        }
+    except Exception as e:
+        logger.error(f"Coverage validation failed: {e}")
+        return {'covered': [], 'missing': required_chars, 'coverage_ratio': 0.0}
+
+
 # ============================================================================
 # 2. ARC-LENGTH SAMPLING
 # ============================================================================
