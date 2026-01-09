@@ -201,3 +201,17 @@ Each entry is automatically generated during implementation.
 **Why**: Provides ready-to-use skeleton tensor for topology-aware models.
 
 **Limitation**: Large file size (~50MB for 50 glyphs at 512×512).
+
+---
+
+### 2026-01-09 - Step P1.16: Re-Run Phase 1 Exit Checklist
+
+**Changed**: Created `.planning/phase1_exit_checklist.md` with validated results from `output/p1_final/`.
+
+**Results**:
+- Coverage improved: 54% → 96% (28 → 50 glyphs)
+- All corner-case glyphs (g, Q, y, S, @, &) now parse correctly
+- Tensor outputs: `alphabet_samples.npy` (50, 256, 2), `alphabet_skeletons.npy` (50, 512, 512)
+- SVG files have normalized precision and trailing newlines
+
+**Limitation**: 2 glyphs still fail (likely special characters outside A-Za-z range).
