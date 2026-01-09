@@ -372,6 +372,65 @@ def normalize_path(path: SVGPath, samples: List[complex]) -> Optional[SVGPath]:
         return None
 
 
+def normalize_path_alphabet_relative(
+    path: SVGPath,
+    samples: List[complex],
+    font_metrics: Dict[str, Any]
+) -> Optional[SVGPath]:
+    """
+    Normalize path using alphabet-relative (font-level) scaling.
+    
+    Unlike glyph-local normalization, this preserves inter-glyph scale
+    relationships (e.g., 'M' is taller than 'i').
+    
+    Process:
+    1. Translate so baseline is at y=0
+    2. Scale by font's total_height to normalize to [0, 1] vertically
+    
+    Args:
+        path: svgpathtools.Path object
+        samples: Arc-length samples for bounds computation
+        font_metrics: Dict from extract_font_metrics()
+    
+    Returns:
+        Normalized Path or None on failure
+    """
+    try:
+        if not samples or not font_metrics:
+            logger.warning("Cannot normalize: missing samples or font_metrics")
+            return None
+        
+        total_height = font_metrics['total_height']
+        descender = font_metrics['descender']  # Negative value
+        
+        if total_height <= 0:
+            logger.warning("Invalid font metrics: total_height <= 0")
+            return None
+        
+        # Translate so descender baseline is at y=0
+        # Font coordinates: descender is negative, ascender is positive
+        # We shift up by -descender (which is positive) to put descender at 0
+        offset = complex(0, -descender)
+        translated = path.translated(offset)
+        
+        # Scale by total_height to get y in [0, 1] for full height glyphs
+        scale = 1.0 / total_height
+        normalized = translated.scaled(scale)
+        
+        # Center horizontally based on glyph width
+        xs = [p.real * scale for p in samples]
+        min_x = min(xs)
+        width = max(xs) - min_x
+        x_offset = complex(-min_x + (1.0 - width) / 2, 0)
+        normalized = normalized.translated(x_offset)
+        
+        return normalized
+        
+    except Exception as e:
+        logger.error(f"Alphabet-relative normalization failed: {e}")
+        return None
+
+
 # ============================================================================
 # 4. RASTERIZATION (ANALYSIS ONLY)
 # ============================================================================

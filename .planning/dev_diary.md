@@ -131,3 +131,13 @@ Each entry is automatically generated during implementation.
 **Why**: Required for alphabet-relative normalization — all glyphs must be scaled relative to the same font metrics.
 
 **Limitation**: Relies on OS/2 or hhea tables; malformed fonts may return incorrect values.
+
+---
+
+### 2026-01-09 - Step P1.09: Add Alphabet-Relative Normalization Helper
+
+**Changed**: Added `src/alphabet_pipeline.py:normalize_path_alphabet_relative()` that scales glyphs using font-level metrics instead of glyph-local bounds.
+
+**Why**: Preserves inter-glyph scale relationships (M vs i) critical for alphabet-level style learning.
+
+**Limitation**: Assumes font metrics are accurate; may produce unexpected results for non-standard fonts.
