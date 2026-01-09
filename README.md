@@ -2,17 +2,23 @@
 
 ## Overview
 
-Alphaba is a machine learning project that uses triplet networks to learn character embeddings. The goal is to understand the visual patterns and systematic relationships within writing systems, with the eventual aim of generating new fictional alphabets for worldbuilding projects.
+Alphaba is an alphabet research project with two main tracks:
 
-This project implements representation learning to create structured embedding spaces where characters from the same alphabet cluster together, while characters from different alphabets are pushed apart. The learned representations provide a foundation for understanding and generating cohesive writing systems.
+- A **triplet-network** workflow to learn character embeddings.
+- A **font geometry pipeline** that converts `.ttf` fonts into normalized vector/point/skeleton representations suitable for alphabet-level learning.
+
+The longer-term goal is to understand structure/style in writing systems and enable generation of new, fictional alphabets.
 
 ## Features
 
-- Triplet network implementation for learning character embeddings
-- Custom training loops with triplet loss optimization
-- t-SNE visualization of learned embedding spaces
-- Jupyter notebook workflows for experimentation and analysis
-- Comprehensive evaluation tools for embedding quality assessment
+- Triplet network implementation for learning character embeddings (Omniglot-style)
+- CLI entrypoint for triplet training / generation / evaluation (`main.py`)
+- Font geometry pipeline (`src/alphabet_pipeline.py`) producing:
+  - normalized SVG path strings (`vectors/*.svgpath.txt`)
+  - arc-length point samples (`samples/*_samples.npy`)
+  - rasters and skeletons (`rasters/*.png`, `skeletons/*.png`)
+  - per-font tensors (`alphabet_samples.npy`, `alphabet_skeletons.npy`) and metadata
+- Generative architecture scaffolding (`src/generative_model.py`) consuming alphabet tensors
 
 ## Prerequisites
 
@@ -52,7 +58,19 @@ The project uses the following key dependencies:
 
 ## Usage
 
-### Basic Training Example
+### Triplet Training (Omniglot-Style)
+
+The triplet pipeline expects an Omniglot-style dataset checkout.
+
+#### CLI
+
+See `README_CLI.md` for details. Example:
+
+```bash
+uv run python main.py train --data-path ../omniglot/python --epochs 20 --output-dir outputs
+```
+
+#### Python API
 
 ```python
 from src.data_loader import OmniglotTripletLoader
@@ -89,6 +107,54 @@ from src.training import visualize_training
 visualize_training(history)
 ```
 
+### Font Geometry Pipeline (TTF → Alphabet Tensors)
+
+Process a single `.ttf` font into per-glyph artifacts plus per-font tensors:
+
+```bash
+uv run python -c "from src.alphabet_pipeline import process_font; process_font('alphabet_data/fonts/GoogleSans-VariableFont_GRAD,opsz,wght.ttf','output/pipeline_runs')"
+```
+
+The output directory will contain a subfolder named after the font file stem, including:
+
+```text
+output/pipeline_runs/<FontName>/
+  vectors/
+  samples/
+  rasters/
+  skeletons/
+  glyph_order.json
+  alphabet_samples.npy
+  alphabet_skeletons.npy
+  metadata.json
+```
+
+Note: if some glyphs have no vector path data in a given font, the pipeline will skip them, so the leading dimension of `alphabet_samples.npy` / `alphabet_skeletons.npy` may be **less than 52**. Use `glyph_order.json` (or the tensor shape) as the source of truth.
+
+### Generative Model (Alphabet Tensors)
+
+The generative training code consumes `alphabet_samples.npy` tensors produced by the pipeline.
+
+```bash
+uv run python -c "
+import numpy as np
+from pathlib import Path
+from src.alphabet_data_loader import AlphabetDataLoader
+from src.generative_model import AlphabetVAE, AlphabetTrainer
+
+base = Path('output/pipeline_runs') / 'GoogleSans-VariableFont_GRAD,opsz,wght'
+n_glyphs = int(np.load(base / 'alphabet_samples.npy').shape[0])
+
+loader = AlphabetDataLoader('output/pipeline_runs', n_points=256, n_glyphs=n_glyphs)
+ds = loader.create_dataset(batch_size=1)
+
+model = AlphabetVAE(style_dim=64, n_points=256, n_glyphs=n_glyphs, use_vae=True)
+trainer = AlphabetTrainer(model, learning_rate=1e-3, beta=0.01)
+trainer.fit(ds, epochs=1, steps_per_epoch=10, verbose=False)
+print('ok')
+"
+```
+
 ### Running Notebooks
 
 The project includes Jupyter notebooks for interactive development:
@@ -108,16 +174,19 @@ jupyter notebook
 ```
 alphaba/
 ├── src/
-│   ├── __init__.py
-│   ├── data_loader.py      # Omniglot dataset loading and triplet sampling
-│   ├── models.py          # Triplet network architecture
-│   ├── training.py        # Training loops and evaluation functions
-│   └── utils.py           # Utility functions
+│   ├── alphabet_pipeline.py      # Font geometry pipeline (TTF → artifacts/tensors)
+│   ├── alphabet_data_loader.py   # Loads alphabet tensors for training
+│   ├── generative_model.py       # Generative architecture scaffolding (AlphabetVAE)
+│   ├── data_loader.py            # Omniglot triplet dataset loader
+│   ├── models.py                 # Triplet network model
+│   ├── training.py               # Triplet training utilities
+│   └── train.py                  # Triplet training CLI implementation
 ├── notebooks/
 │   ├── 01_explore_omniglot.ipynb
 │   ├── 02_train_triplet_network.ipynb
 │   └── 03_visualise_embeddings.ipynb
-├── omniglot/              # Dataset directory (clone separately)
+├── alphabet_data/          # Fonts + registry for pipeline
+├── omniglot/               # Dataset directory (clone separately, optional)
 ├── pyproject.toml         # Project configuration and dependencies
 ├── uv.lock               # Dependency lock file
 └── README.md             # This file
@@ -125,7 +194,7 @@ alphaba/
 
 ## Dataset Setup
 
-The project uses the Omniglot dataset, which must be obtained separately:
+The triplet workflow uses the Omniglot dataset, which must be obtained separately:
 
 ```bash
 # Clone the Omniglot dataset
