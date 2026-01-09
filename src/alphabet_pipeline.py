@@ -818,6 +818,20 @@ def process_font(
     # Compute alphabet-level statistics
     alphabet_stats = compute_alphabet_stats(glyph_stats_list, font_name)
     
+    # Aggregate samples into alphabet tensor
+    successful_glyphs = [s['glyph'] for s in glyph_stats_list if not s.get('skeleton_failed', False)]
+    alphabet_samples, glyph_order = aggregate_alphabet_samples(
+        base_path / 'samples', successful_glyphs
+    )
+    
+    # Save glyph_order.json
+    with open(base_path / 'glyph_order.json', 'w') as f:
+        json.dump(glyph_order, f, indent=2)
+    
+    # Save alphabet_samples.npy
+    np.save(base_path / 'alphabet_samples.npy', alphabet_samples)
+    logger.info(f"  Saved alphabet_samples.npy: shape {alphabet_samples.shape}")
+    
     # Save metadata
     with open(base_path / 'metadata.json', 'w') as f:
         json.dump({

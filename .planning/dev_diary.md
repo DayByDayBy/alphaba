@@ -171,3 +171,13 @@ Each entry is automatically generated during implementation.
 **Why**: Provides a single tensor for the encoder to process an entire alphabet.
 
 **Limitation**: Assumes all glyphs have same sample count (256).
+
+---
+
+### 2026-01-09 - Step P1.13: Save glyph_order.json and alphabet_samples.npy Per Font
+
+**Changed**: Modified `src/alphabet_pipeline.py:process_font()` to save `glyph_order.json` and `alphabet_samples.npy` after processing all glyphs.
+
+**Why**: Provides ready-to-use alphabet-level tensors for training without separate aggregation step.
+
+**Limitation**: None identified.
