@@ -869,6 +869,14 @@ def process_font(
     np.save(base_path / 'alphabet_samples.npy', alphabet_samples)
     logger.info(f"  Saved alphabet_samples.npy: shape {alphabet_samples.shape}")
     
+    # Aggregate and save alphabet_skeletons.npy
+    alphabet_skeletons, skeleton_order = aggregate_alphabet_skeletons(
+        base_path / 'skeletons', glyph_order
+    )
+    if len(alphabet_skeletons) > 0:
+        np.save(base_path / 'alphabet_skeletons.npy', alphabet_skeletons)
+        logger.info(f"  Saved alphabet_skeletons.npy: shape {alphabet_skeletons.shape}")
+    
     # Save metadata
     with open(base_path / 'metadata.json', 'w') as f:
         json.dump({

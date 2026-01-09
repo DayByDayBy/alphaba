@@ -191,3 +191,13 @@ Each entry is automatically generated during implementation.
 **Why**: Provides skeleton data as a tensor for potential topology-aware encoding.
 
 **Limitation**: Assumes all skeletons are same size (512×512).
+
+---
+
+### 2026-01-09 - Step P1.15: Save alphabet_skeletons.npy Per Font
+
+**Changed**: Modified `src/alphabet_pipeline.py:process_font()` to aggregate and save `alphabet_skeletons.npy` alongside other outputs.
+
+**Why**: Provides ready-to-use skeleton tensor for topology-aware models.
+
+**Limitation**: Large file size (~50MB for 50 glyphs at 512×512).
