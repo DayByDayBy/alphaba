@@ -181,3 +181,13 @@ Each entry is automatically generated during implementation.
 **Why**: Provides ready-to-use alphabet-level tensors for training without separate aggregation step.
 
 **Limitation**: None identified.
+
+---
+
+### 2026-01-09 - Step P1.14: Add Alphabet Skeleton Tensor Aggregation Helper
+
+**Changed**: Added `src/alphabet_pipeline.py:aggregate_alphabet_skeletons()` to stack per-glyph skeleton images into a single `(N, 512, 512)` tensor.
+
+**Why**: Provides skeleton data as a tensor for potential topology-aware encoding.
+
+**Limitation**: Assumes all skeletons are same size (512×512).

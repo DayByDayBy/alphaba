@@ -721,6 +721,43 @@ def aggregate_alphabet_samples(
     return np.stack(samples_list, axis=0), actual_order
 
 
+def aggregate_alphabet_skeletons(
+    skeletons_dir: Path,
+    glyph_order: List[str],
+    target_size: int = DEFAULT_RASTER_SIZE
+) -> Tuple[np.ndarray, List[str]]:
+    """
+    Aggregate per-glyph skeleton images into a single alphabet tensor.
+    
+    Args:
+        skeletons_dir: Path to directory containing skeleton PNG files
+        glyph_order: Ordered list of glyph characters to include
+        target_size: Expected image size (square)
+    
+    Returns:
+        Tuple of (alphabet_skeletons array shape (N, H, W), actual_glyph_order)
+    """
+    skeletons_list = []
+    actual_order = []
+    
+    for glyph in glyph_order:
+        skeleton_file = skeletons_dir / f'{glyph}.png'
+        if skeleton_file.exists():
+            img = np.array(Image.open(skeleton_file))
+            if img.shape == (target_size, target_size):
+                skeletons_list.append(img)
+                actual_order.append(glyph)
+            else:
+                logger.warning(f"Skipping {glyph}: unexpected shape {img.shape}")
+        else:
+            logger.warning(f"Skipping {glyph}: skeleton file not found")
+    
+    if not skeletons_list:
+        return np.array([]), []
+    
+    return np.stack(skeletons_list, axis=0), actual_order
+
+
 # ============================================================================
 # 8. BATCH PROCESSING
 # ============================================================================
