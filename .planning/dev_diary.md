@@ -69,3 +69,13 @@ Each entry is automatically generated during implementation.
 **Why**: Coverage validation and corner-case glyph checks use characters (e.g. `@`) that often do not match font-internal glyph names.
 
 **Limitation**: Fonts with incomplete cmap tables may still be missing expected characters.
+
+---
+
+### 2026-01-09 - Step P1.03: Extract Pen→SVG Path Conversion Helper
+
+**Changed**: Refactored `src/alphabet_pipeline.py:glyph_to_path()` by extracting `RecordingPen` conversion into `pen_value_to_svg_path_string()` helper.
+
+**Why**: The qCurveTo fix needs clean, localized logic that can be unit-tested without reworking font loading.
+
+**Limitation**: None identified (no intended behavior change).

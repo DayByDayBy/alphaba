@@ -53,6 +53,38 @@ GLYPH_SET = [chr(i) for i in range(ord('A'), ord('Z') + 1)] + \
 # 1. FONT PARSING
 # ============================================================================
 
+def pen_value_to_svg_path_string(pen_value: List[Tuple[str, Tuple]]) -> str:
+    """
+    Convert RecordingPen.value to an SVG path string.
+    
+    Args:
+        pen_value: List of (operation, args) tuples from RecordingPen
+    
+    Returns:
+        SVG path data string (e.g. "M 0 0 L 100 100 Z")
+    """
+    path_data = []
+    for op, args in pen_value:
+        if op == 'moveTo':
+            x, y = args[0]
+            path_data.append(f"M {x} {y}")
+        elif op == 'lineTo':
+            x, y = args[0]
+            path_data.append(f"L {x} {y}")
+        elif op == 'qCurveTo':
+            # QuadraticBezier - TrueType multi-point sequences
+            points = ' '.join(f"{x} {y}" for x, y in args)
+            path_data.append(f"Q {points}")
+        elif op == 'curveTo':
+            # CubicBezier
+            points = ' '.join(f"{x} {y}" for x, y in args)
+            path_data.append(f"C {points}")
+        elif op == 'closePath':
+            path_data.append("Z")
+    
+    return ' '.join(path_data)
+
+
 def glyph_to_path(ttf_path: str, glyph_char: str) -> Optional[SVGPath]:
     """
     Extract vector path from TTF glyph.
@@ -89,31 +121,13 @@ def glyph_to_path(ttf_path: str, glyph_char: str) -> Optional[SVGPath]:
         pen = RecordingPen()
         glyph_set[glyph_name].draw(pen)
         
-        # Convert to SVG path data
-        path_data = []
-        for op, args in pen.value:
-            if op == 'moveTo':
-                x, y = args[0]
-                path_data.append(f"M {x} {y}")
-            elif op == 'lineTo':
-                x, y = args[0]
-                path_data.append(f"L {x} {y}")
-            elif op == 'qCurveTo':
-                # QuadraticBezier
-                points = ' '.join(f"{x} {y}" for x, y in args)
-                path_data.append(f"Q {points}")
-            elif op == 'curveTo':
-                # CubicBezier
-                points = ' '.join(f"{x} {y}" for x, y in args)
-                path_data.append(f"C {points}")
-            elif op == 'closePath':
-                path_data.append("Z")
+        # Convert to SVG path data using helper
+        svg_path_string = pen_value_to_svg_path_string(pen.value)
         
-        if not path_data:
+        if not svg_path_string:
             logger.warning(f"Glyph '{glyph_name}' has no path data")
             return None
         
-        svg_path_string = ' '.join(path_data)
         path = parse_path(svg_path_string)
         
         return path
