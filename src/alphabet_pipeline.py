@@ -57,6 +57,10 @@ def pen_value_to_svg_path_string(pen_value: List[Tuple[str, Tuple]]) -> str:
     """
     Convert RecordingPen.value to an SVG path string.
     
+    Handles TrueType qCurveTo with implicit on-curve points per the spec:
+    - Multiple off-curve points have implicit on-curve midpoints between them
+    - Final point is always the on-curve endpoint
+    
     Args:
         pen_value: List of (operation, args) tuples from RecordingPen
     
@@ -72,13 +76,46 @@ def pen_value_to_svg_path_string(pen_value: List[Tuple[str, Tuple]]) -> str:
             x, y = args[0]
             path_data.append(f"L {x} {y}")
         elif op == 'qCurveTo':
-            # QuadraticBezier - TrueType multi-point sequences
-            points = ' '.join(f"{x} {y}" for x, y in args)
-            path_data.append(f"Q {points}")
+            # TrueType quadratic curves with implicit on-curve points
+            # Filter out None sentinels that some fonts use
+            points = [p for p in args if p is not None]
+            
+            if len(points) == 0:
+                continue
+            elif len(points) == 1:
+                # Single control point + endpoint combined - just endpoint
+                ex, ey = points[0]
+                path_data.append(f"L {ex} {ey}")
+            elif len(points) == 2:
+                # Standard quadratic: 1 control + 1 endpoint
+                cx, cy = points[0]
+                ex, ey = points[1]
+                path_data.append(f"Q {cx} {cy} {ex} {ey}")
+            else:
+                # Multiple off-curve points with implicit on-curve midpoints
+                # TrueType spec: between consecutive off-curve points,
+                # there's an implicit on-curve point at the midpoint
+                for i in range(len(points) - 1):
+                    cx, cy = points[i]
+                    if i < len(points) - 2:
+                        # Midpoint to next off-curve point
+                        nx, ny = points[i + 1]
+                        mx, my = (cx + nx) / 2, (cy + ny) / 2
+                        path_data.append(f"Q {cx} {cy} {mx} {my}")
+                    else:
+                        # Final segment: last off-curve to on-curve endpoint
+                        ex, ey = points[-1]
+                        path_data.append(f"Q {cx} {cy} {ex} {ey}")
         elif op == 'curveTo':
-            # CubicBezier
-            points = ' '.join(f"{x} {y}" for x, y in args)
-            path_data.append(f"C {points}")
+            # CubicBezier: 2 control points + 1 endpoint
+            if len(args) == 3:
+                c1x, c1y = args[0]
+                c2x, c2y = args[1]
+                ex, ey = args[2]
+                path_data.append(f"C {c1x} {c1y} {c2x} {c2y} {ex} {ey}")
+            else:
+                points = ' '.join(f"{x} {y}" for x, y in args)
+                path_data.append(f"C {points}")
         elif op == 'closePath':
             path_data.append("Z")
     

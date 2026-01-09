@@ -79,3 +79,15 @@ Each entry is automatically generated during implementation.
 **Why**: The qCurveTo fix needs clean, localized logic that can be unit-tested without reworking font loading.
 
 **Limitation**: None identified (no intended behavior change).
+
+---
+
+### 2026-01-09 - Step P1.04: Fix TrueType qCurveTo Handling
+
+**Changed**: Updated `src/alphabet_pipeline.py:pen_value_to_svg_path_string()` to expand TrueType multi-point `qCurveTo` sequences into standard SVG quadratic curves with implicit on-curve midpoints.
+
+**Why**: TrueType fonts use a compact format where consecutive off-curve points have an implied on-curve midpoint between them. The previous implementation failed to expand these, causing parse errors on most glyphs.
+
+**Validated**: `g`, `Q`, `y`, `S`, `@`, `&` now all parse successfully (previously failed).
+
+**Limitation**: Extremely unusual contour structures (e.g. entirely off-curve) are untested.
