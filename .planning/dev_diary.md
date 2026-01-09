@@ -161,3 +161,13 @@ Each entry is automatically generated during implementation.
 **Why**: Ensures saved `*_samples.npy` files contain coordinates consistent with the normalized vector path.
 
 **Limitation**: Extra `arc_length_sample()` call per glyph adds minor overhead.
+
+---
+
+### 2026-01-09 - Step P1.12: Add Alphabet Sample Tensor Aggregation Helper
+
+**Changed**: Added `src/alphabet_pipeline.py:aggregate_alphabet_samples()` to stack per-glyph sample files into a single `(N, 256, 2)` tensor.
+
+**Why**: Provides a single tensor for the encoder to process an entire alphabet.
+
+**Limitation**: Assumes all glyphs have same sample count (256).

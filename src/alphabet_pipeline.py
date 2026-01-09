@@ -671,6 +671,43 @@ def compute_alphabet_stats(glyph_stats: List[Dict[str, Any]], font_name: str) ->
     }
 
 
+def aggregate_alphabet_samples(
+    samples_dir: Path,
+    glyph_order: List[str],
+    n_samples: int = DEFAULT_SAMPLE_COUNT
+) -> Tuple[np.ndarray, List[str]]:
+    """
+    Aggregate per-glyph sample files into a single alphabet tensor.
+    
+    Args:
+        samples_dir: Path to directory containing *_samples.npy files
+        glyph_order: Ordered list of glyph characters to include
+        n_samples: Expected number of samples per glyph
+    
+    Returns:
+        Tuple of (alphabet_samples array shape (N, n_samples, 2), actual_glyph_order)
+    """
+    samples_list = []
+    actual_order = []
+    
+    for glyph in glyph_order:
+        sample_file = samples_dir / f'{glyph}_samples.npy'
+        if sample_file.exists():
+            samples = np.load(sample_file)
+            if samples.shape == (n_samples, 2):
+                samples_list.append(samples)
+                actual_order.append(glyph)
+            else:
+                logger.warning(f"Skipping {glyph}: unexpected shape {samples.shape}")
+        else:
+            logger.warning(f"Skipping {glyph}: file not found")
+    
+    if not samples_list:
+        return np.array([]), []
+    
+    return np.stack(samples_list, axis=0), actual_order
+
+
 # ============================================================================
 # 8. BATCH PROCESSING
 # ============================================================================
