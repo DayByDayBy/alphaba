@@ -2,7 +2,7 @@
 
 ## Overview
 
-Alphaba is a machine learning project that uses triplet networks to learn character embeddings from the Omniglot dataset. The goal is to understand the visual patterns and systematic relationships within writing systems, with the eventual aim of generating new fictional alphabets for worldbuilding projects.
+Alphaba is a machine learning project that uses triplet networks to learn character embeddings. The goal is to understand the visual patterns and systematic relationships within writing systems, with the eventual aim of generating new fictional alphabets for worldbuilding projects.
 
 This project implements representation learning to create structured embedding spaces where characters from the same alphabet cluster together, while characters from different alphabets are pushed apart. The learned representations provide a foundation for understanding and generating cohesive writing systems.
 
@@ -10,7 +10,6 @@ This project implements representation learning to create structured embedding s
 
 - Triplet network implementation for learning character embeddings
 - Custom training loops with triplet loss optimization
-- Integration with the Omniglot dataset (50+ alphabets, 1600+ characters)
 - t-SNE visualization of learned embedding spaces
 - Jupyter notebook workflows for experimentation and analysis
 - Comprehensive evaluation tools for embedding quality assessment
