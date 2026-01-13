@@ -1,0 +1,553 @@
+{
+  "alphabet_stats": {
+    "font_name": "GoogleSans-VariableFont_GRAD,opsz,wght",
+    "pipeline_version": "phase0_v1",
+    "n_glyphs": 28,
+    "mean_aspect_ratio": 0.7553907467299356,
+    "std_aspect_ratio": 0.265093904086515,
+    "mean_arc_length": 4.928019265073972,
+    "std_arc_length": 1.1602654916587687,
+    "mean_skeleton_pixels": 1084.0357142857142,
+    "junction_degree_histogram": {
+      "3": 117,
+      "4": 16
+    },
+    "failed_glyphs": []
+  },
+  "glyph_stats": [
+    {
+      "glyph": "A",
+      "bounding_box": [
+        15.0,
+        0.0,
+        651.8557177766245,
+        716.0
+      ],
+      "aspect_ratio": 0.8894632929841124,
+      "arc_length": 5.824214455187349,
+      "n_samples": 256,
+      "skeleton_pixels": 1255,
+      "n_components": 394,
+      "endpoints": 1,
+      "junctions": 8,
+      "junction_degrees": {
+        "3": 7,
+        "4": 1
+      }
+    },
+    {
+      "glyph": "D",
+      "bounding_box": [
+        79.0,
+        0.0,
+        656.9999734185753,
+        716.0
+      ],
+      "aspect_ratio": 0.8072625327075075,
+      "arc_length": 5.592110552087235,
+      "n_samples": 256,
+      "skeleton_pixels": 1383,
+      "n_components": 227,
+      "endpoints": 0,
+      "junctions": 0,
+      "junction_degrees": {}
+    },
+    {
+      "glyph": "E",
+      "bounding_box": [
+        79.0,
+        0.0,
+        493.0,
+        716.0
+      ],
+      "aspect_ratio": 0.5782122905027933,
+      "arc_length": 5.240223463687151,
+      "n_samples": 256,
+      "skeleton_pixels": 1140,
+      "n_components": 4,
+      "endpoints": 3,
+      "junctions": 4,
+      "junction_degrees": {
+        "3": 3,
+        "4": 1
+      }
+    },
+    {
+      "glyph": "F",
+      "bounding_box": [
+        79.0,
+        0.0,
+        493.0,
+        716.0
+      ],
+      "aspect_ratio": 0.5782122905027933,
+      "arc_length": 4.32122905027933,
+      "n_samples": 256,
+      "skeleton_pixels": 905,
+      "n_components": 4,
+      "endpoints": 3,
+      "junctions": 4,
+      "junction_degrees": {
+        "3": 3,
+        "4": 1
+      }
+    },
+    {
+      "glyph": "H",
+      "bounding_box": [
+        79.0,
+        0.0,
+        617.0,
+        716.0
+      ],
+      "aspect_ratio": 0.7513966480446927,
+      "arc_length": 5.896648044692737,
+      "n_samples": 256,
+      "skeleton_pixels": 1229,
+      "n_components": 5,
+      "endpoints": 4,
+      "junctions": 8,
+      "junction_degrees": {
+        "3": 6,
+        "4": 2
+      }
+    },
+    {
+      "glyph": "I",
+      "bounding_box": [
+        79.0,
+        0.0,
+        164.0,
+        716.0
+      ],
+      "aspect_ratio": 0.11871508379888268,
+      "arc_length": 2.2374301675977653,
+      "n_samples": 256,
+      "skeleton_pixels": 453,
+      "n_components": 3,
+      "endpoints": 2,
+      "junctions": 0,
+      "junction_degrees": {}
+    },
+    {
+      "glyph": "K",
+      "bounding_box": [
+        79.0,
+        0.0,
+        617.4835034505218,
+        716.0
+      ],
+      "aspect_ratio": 0.7520719321934661,
+      "arc_length": 6.022064967923518,
+      "n_samples": 256,
+      "skeleton_pixels": 1149,
+      "n_components": 466,
+      "endpoints": 4,
+      "junctions": 6,
+      "junction_degrees": {
+        "3": 6
+      }
+    },
+    {
+      "glyph": "L",
+      "bounding_box": [
+        79.0,
+        0.0,
+        477.0,
+        716.0
+      ],
+      "aspect_ratio": 0.5558659217877095,
+      "arc_length": 3.111731843575419,
+      "n_samples": 256,
+      "skeleton_pixels": 678,
+      "n_components": 4,
+      "endpoints": 2,
+      "junctions": 0,
+      "junction_degrees": {}
+    },
+    {
+      "glyph": "M",
+      "bounding_box": [
+        79.0,
+        0.0,
+        785.0,
+        716.0
+      ],
+      "aspect_ratio": 0.9860335195530726,
+      "arc_length": 7.8782748667205835,
+      "n_samples": 256,
+      "skeleton_pixels": 1780,
+      "n_components": 401,
+      "endpoints": 3,
+      "junctions": 3,
+      "junction_degrees": {
+        "3": 3
+      }
+    },
+    {
+      "glyph": "N",
+      "bounding_box": [
+        79.0,
+        0.0,
+        627.0,
+        716.0
+      ],
+      "aspect_ratio": 0.7653631284916201,
+      "arc_length": 6.072283505401045,
+      "n_samples": 256,
+      "skeleton_pixels": 1345,
+      "n_components": 304,
+      "endpoints": 4,
+      "junctions": 6,
+      "junction_degrees": {
+        "3": 6
+      }
+    },
+    {
+      "glyph": "P",
+      "bounding_box": [
+        79.0,
+        0.0,
+        542.9928648120424,
+        716.0
+      ],
+      "aspect_ratio": 0.6480347273911207,
+      "arc_length": 4.7707738974967455,
+      "n_samples": 256,
+      "skeleton_pixels": 1103,
+      "n_components": 132,
+      "endpoints": 1,
+      "junctions": 4,
+      "junction_degrees": {
+        "3": 3,
+        "4": 1
+      }
+    },
+    {
+      "glyph": "T",
+      "bounding_box": [
+        22.0,
+        0.0,
+        508.0,
+        716.0
+      ],
+      "aspect_ratio": 0.6787709497206704,
+      "arc_length": 3.6787709497206706,
+      "n_samples": 256,
+      "skeleton_pixels": 745,
+      "n_components": 6,
+      "endpoints": 3,
+      "junctions": 3,
+      "junction_degrees": {
+        "3": 3
+      }
+    },
+    {
+      "glyph": "U",
+      "bounding_box": [
+        70.0,
+        -16.0,
+        597.0,
+        716.0
+      ],
+      "aspect_ratio": 0.7199453551912568,
+      "arc_length": 4.718360998780375,
+      "n_samples": 256,
+      "skeleton_pixels": 1059,
+      "n_components": 160,
+      "endpoints": 2,
+      "junctions": 0,
+      "junction_degrees": {}
+    },
+    {
+      "glyph": "V",
+      "bounding_box": [
+        17.010812463919137,
+        0.0,
+        617.9938534261759,
+        716.0
+      ],
+      "aspect_ratio": 0.8393617890534312,
+      "arc_length": 4.260763468170671,
+      "n_samples": 256,
+      "skeleton_pixels": 991,
+      "n_components": 374,
+      "endpoints": 3,
+      "junctions": 5,
+      "junction_degrees": {
+        "3": 4,
+        "4": 1
+      }
+    },
+    {
+      "glyph": "W",
+      "bounding_box": [
+        18.174796352496884,
+        0.0,
+        922.7894140574977,
+        716.0
+      ],
+      "aspect_ratio": 1.2634282370181575,
+      "arc_length": 6.113027232686161,
+      "n_samples": 256,
+      "skeleton_pixels": 1450,
+      "n_components": 467,
+      "endpoints": 5,
+      "junctions": 7,
+      "junction_degrees": {
+        "3": 7
+      }
+    },
+    {
+      "glyph": "X",
+      "bounding_box": [
+        12.0,
+        0.0,
+        604.2226011185406,
+        716.0
+      ],
+      "aspect_ratio": 0.8271265378750567,
+      "arc_length": 5.409357158892251,
+      "n_samples": 256,
+      "skeleton_pixels": 1131,
+      "n_components": 701,
+      "endpoints": 2,
+      "junctions": 10,
+      "junction_degrees": {
+        "3": 9,
+        "4": 1
+      }
+    },
+    {
+      "glyph": "Y",
+      "bounding_box": [
+        10.0,
+        0.0,
+        574.2448604235092,
+        716.0
+      ],
+      "aspect_ratio": 0.7880514810384206,
+      "arc_length": 3.921274140364169,
+      "n_samples": 256,
+      "skeleton_pixels": 804,
+      "n_components": 328,
+      "endpoints": 2,
+      "junctions": 4,
+      "junction_degrees": {
+        "3": 4
+      }
+    },
+    {
+      "glyph": "Z",
+      "bounding_box": [
+        40.0,
+        0.0,
+        528.0,
+        716.0
+      ],
+      "aspect_ratio": 0.6815642458100558,
+      "arc_length": 4.739285866783099,
+      "n_samples": 256,
+      "skeleton_pixels": 1009,
+      "n_components": 287,
+      "endpoints": 4,
+      "junctions": 8,
+      "junction_degrees": {
+        "3": 6,
+        "4": 2
+      }
+    },
+    {
+      "glyph": "b",
+      "bounding_box": [
+        62.0,
+        -16.0,
+        564.9161583604946,
+        716.0
+      ],
+      "aspect_ratio": 0.687043932186468,
+      "arc_length": 4.949486441370815,
+      "n_samples": 256,
+      "skeleton_pixels": 1187,
+      "n_components": 316,
+      "endpoints": 2,
+      "junctions": 7,
+      "junction_degrees": {
+        "3": 6,
+        "4": 1
+      }
+    },
+    {
+      "glyph": "d",
+      "bounding_box": [
+        35.03751084348814,
+        -16.0,
+        538.0,
+        716.0
+      ],
+      "aspect_ratio": 0.6871072256236501,
+      "arc_length": 4.950321725173075,
+      "n_samples": 256,
+      "skeleton_pixels": 1187,
+      "n_components": 320,
+      "endpoints": 2,
+      "junctions": 6,
+      "junction_degrees": {
+        "3": 6
+      }
+    },
+    {
+      "glyph": "k",
+      "bounding_box": [
+        62.0,
+        0.0,
+        501.0,
+        716.0
+      ],
+      "aspect_ratio": 0.6131284916201117,
+      "arc_length": 5.205799260381851,
+      "n_samples": 256,
+      "skeleton_pixels": 982,
+      "n_components": 344,
+      "endpoints": 3,
+      "junctions": 7,
+      "junction_degrees": {
+        "3": 6,
+        "4": 1
+      }
+    },
+    {
+      "glyph": "l",
+      "bounding_box": [
+        62.0,
+        0.0,
+        147.0,
+        716.0
+      ],
+      "aspect_ratio": 0.11871508379888268,
+      "arc_length": 2.2374301675977653,
+      "n_samples": 256,
+      "skeleton_pixels": 453,
+      "n_components": 3,
+      "endpoints": 2,
+      "junctions": 0,
+      "junction_degrees": {}
+    },
+    {
+      "glyph": "o",
+      "bounding_box": [
+        35.072803188293925,
+        -16.0,
+        558.9421722010334,
+        525.9962129621362
+      ],
+      "aspect_ratio": 0.966555404787186,
+      "arc_length": 5.289912014486516,
+      "n_samples": 256,
+      "skeleton_pixels": 1257,
+      "n_components": 435,
+      "endpoints": 0,
+      "junctions": 0,
+      "junction_degrees": {}
+    },
+    {
+      "glyph": "q",
+      "bounding_box": [
+        35.097791779225226,
+        -216.0,
+        538.0,
+        525.9865554770104
+      ],
+      "aspect_ratio": 0.6777780601394692,
+      "arc_length": 4.910651118558137,
+      "n_samples": 256,
+      "skeleton_pixels": 1178,
+      "n_components": 311,
+      "endpoints": 2,
+      "junctions": 7,
+      "junction_degrees": {
+        "3": 6,
+        "4": 1
+      }
+    },
+    {
+      "glyph": "v",
+      "bounding_box": [
+        5.266619709665321,
+        0.0,
+        503.25806711051905,
+        510.0
+      ],
+      "aspect_ratio": 0.9764538184330466,
+      "arc_length": 4.408473979232672,
+      "n_samples": 256,
+      "skeleton_pixels": 1002,
+      "n_components": 422,
+      "endpoints": 3,
+      "junctions": 3,
+      "junction_degrees": {
+        "3": 3
+      }
+    },
+    {
+      "glyph": "w",
+      "bounding_box": [
+        9.666639808614235,
+        0.0,
+        766.8135024252125,
+        510.0
+      ],
+      "aspect_ratio": 1.4846016914050946,
+      "arc_length": 5.345201501233918,
+      "n_samples": 256,
+      "skeleton_pixels": 1234,
+      "n_components": 448,
+      "endpoints": 5,
+      "junctions": 8,
+      "junction_degrees": {
+        "3": 7,
+        "4": 1
+      }
+    },
+    {
+      "glyph": "x",
+      "bounding_box": [
+        6.0,
+        0.0,
+        465.4453907575296,
+        510.0
+      ],
+      "aspect_ratio": 0.9008733152108424,
+      "arc_length": 5.686278608366046,
+      "n_samples": 256,
+      "skeleton_pixels": 1177,
+      "n_components": 729,
+      "endpoints": 1,
+      "junctions": 8,
+      "junction_degrees": {
+        "3": 7,
+        "4": 1
+      }
+    },
+    {
+      "glyph": "z",
+      "bounding_box": [
+        40.0,
+        0.0,
+        453.0,
+        510.0
+      ],
+      "aspect_ratio": 0.8098039215686275,
+      "arc_length": 5.193159975624148,
+      "n_samples": 256,
+      "skeleton_pixels": 1087,
+      "n_components": 319,
+      "endpoints": 4,
+      "junctions": 7,
+      "junction_degrees": {
+        "3": 6,
+        "4": 1
+      }
+    }
+  ]
+}
